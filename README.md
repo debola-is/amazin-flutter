@@ -19,6 +19,9 @@ A clone of the Amazon mobile shopping application built with Flutter for the mob
          npm install ```
 - run ```bash 
          npm run start ```
+ ```bash
+    npm install -g ionic
+    ```
 While your server is running, copy the ip address as this will be used to configure the flutter app client.
 
 ### Flutter Application
