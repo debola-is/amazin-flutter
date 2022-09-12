@@ -15,10 +15,10 @@ A clone of the Amazon mobile shopping application built with Flutter for the mob
 ### Backend
 - run the backend server locally
 - cd into "server" directory
-- run ``` bash
-  npm install ```
-- run ``` bash 
-  npm run start ```
+- run ```bash
+         npm install ```
+- run ```bash 
+         npm run start ```
 While your server is running, copy the ip address as this will be used to configure the flutter app client.
 
 ### Flutter Application
