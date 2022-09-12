@@ -15,13 +15,15 @@ A clone of the Amazon mobile shopping application built with Flutter for the mob
 ### Backend
 - run the backend server locally
 - cd into "server" directory
-- run ``` npm install ```
-- run ``` npm run start ```
+- run ``` bash
+  npm install ```
+- run ``` bash 
+  npm run start ```
 While your server is running, copy the ip address as this will be used to configure the flutter app client.
 
 ### Flutter Application
-- Firstly, refer to the [flutter online documentation](https://docs.flutter.dev/), which offers tutorials,
+- firstly, refer to the [flutter online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on setting up your pc for mobile development, and a full API reference.
 - cd back into the project root directory
 - input the server ip address from above in the global variables file "./lib/constants/global_variables.dart"
-- Run the flutter application in your preferred emulator device
+- run the flutter application in your preferred emulator device
