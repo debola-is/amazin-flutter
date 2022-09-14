@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
+const { default: mongoose } = require('mongoose');
 
 
 const authRouter = express.Router();
@@ -42,7 +43,7 @@ authRouter.post('/api/signup', async (req,res)=>{
 });
 
 
-authRouter.post('/api/signin', (req, res)=>{
+authRouter.post('/api/signin', async (req, res)=>{
     /**
      * Get login details from request body
      * Check database if user with the entered email exists
@@ -56,6 +57,13 @@ authRouter.post('/api/signin', (req, res)=>{
             error: "Incomplete parameters sent!"
         });
     } // perform basic validation to verify post request contains all neccessary inputs
+
+    var existingUser = await User.findOne({email});
+    if(!existingUser) {
+        return res.status(400).json({error: "This email address is not registered. Sign up?"});
+    }
+
+
 },);
 
 
