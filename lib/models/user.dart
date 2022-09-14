@@ -28,6 +28,7 @@ class User {
       'address': address,
       'type': type,
       'token': token,
+      'email': email,
     };
   }
 

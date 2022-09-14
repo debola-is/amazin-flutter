@@ -26,7 +26,7 @@ authRouter.post('/api/signup', async (req,res)=>{
 
     try{
         
-    const existingUser = await User.findOne({email: email}); //search for existing user in database
+    const existingUser = await User.findOne({email}); //search for existing user in database
     if(existingUser) {
         return res.status(400).json({msg: "Email address already registered by another user."});
     }
@@ -37,9 +37,26 @@ authRouter.post('/api/signup', async (req,res)=>{
     res.json(user);
     } 
     catch(e) {
-        res.status(500).json({error: e.message});
+        return res.status(500).json({error: e.message});
     }
 });
+
+
+authRouter.post('/api/signin', (req, res)=>{
+    /**
+     * Get login details from request body
+     * Check database if user with the entered email exists
+     * Sign in user if user exists, deny user access if user doesn't exist
+     * Use appropriate status codes and result formatting
+     */
+    const {email, password} = req.body;
+
+    if(!email || !password ) {
+        return res.status(400).json({
+            error: "Incomplete parameters sent!"
+        });
+    } // perform basic validation to verify post request contains all neccessary inputs
+},);
 
 
 function encryptPassword(password) {
