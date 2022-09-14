@@ -28,7 +28,7 @@ authRouter.post('/api/signup', async (req,res)=>{
         
     const existingUser = await User.findOne({email}); //search for existing user in database
     if(existingUser) {
-        return res.status(400).json({msg: "Email address already registered by another user."});
+        return res.status(400).json({msg: "This email address is linked to an existing account."});
     }
 
     let user = new User({name,email, password: encryptPassword(password),});    // create new user 

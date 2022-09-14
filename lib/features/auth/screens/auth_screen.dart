@@ -27,6 +27,24 @@ class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  // String _currentEmail = "";
+  // String _currentName = "";
+  // String _currentPassword = "";
+
+  // void saveTextInput() {
+  //   _currentEmail = _emailController.text;
+  //   _currentName = _nameController.text;
+  //   _currentPassword = _passwordController.text;
+  // }
+
+  // void signUpUser() {
+  //   authService.signUpUser(
+  //     context: context,
+  //     email: _currentEmail,
+  //     password: _currentPassword,
+  //     name: _currentName,
+  //   );
+  // }
 
   void signUpUser() {
     authService.signUpUser(
@@ -37,14 +55,18 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    //To avoid memory leaks, we have to dispose our controllers
+  void disposeControllers() {
     _emailController.dispose();
     _passwordController.dispose();
     _nameController.dispose();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    disposeControllers();
+    super.dispose();
+    //To avoid memory leaks, we have to dispose our controllers
   }
 
   @override
@@ -58,7 +80,6 @@ class _AuthScreenState extends State<AuthScreen> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView(
-            addRepaintBoundaries: false,
             children: [
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.0),
@@ -123,9 +144,10 @@ class _AuthScreenState extends State<AuthScreen> {
                         CustomButton(
                             onTap: () {
                               if (_signUpFormKey.currentState!.validate()) {
-                                showSnackBar(
-                                    context, '$_emailController.textsed');
                                 signUpUser();
+                              } else {
+                                showSnackBar(context,
+                                    'The information you\'ve supplied is invalid.');
                               }
                             },
                             text: "Register")
