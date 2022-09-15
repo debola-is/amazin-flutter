@@ -72,8 +72,8 @@ authRouter.post('/api/signin', async (req, res)=>{
         return res.status(400).json({error: "The password you entered is incorrect!"});
      }
         
-    jwt.sign({id: existingUser._id}, "passwordKey");
-    return res.json({token, ...existingUser._doc});
+    const token = jwt.sign({id: existingUser._id}, "passwordKey");
+    return res.json({token, ...existingUser._doc}); //...existingUser.doc is object destructuring shorthand.
     
     }catch(e) {
         return res.status(500).json({error: e.message}); 

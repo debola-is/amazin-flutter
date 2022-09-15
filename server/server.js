@@ -10,7 +10,7 @@ const db = "mongodb://debola:pingmenot@ac-evsdkma-shard-00-00.zbnsvhm.mongodb.ne
 // For testing on an emulator, the IP adress parmaeter should be used in the 
 // app.listen call back.
 const PORT   = 3000;
-// const IP = "0.0.0.0";
+const IP = "172.20.10.3";
 const app = express();
 
 
@@ -36,7 +36,7 @@ mongoose.connect(db).then(()=>{
 //     console.log("connected at port: ", PORT);
 // });
 
-app.listen(PORT, () => {
+app.listen(PORT,IP, () => {
     console.log("connected at port: ", PORT);
 });
 
