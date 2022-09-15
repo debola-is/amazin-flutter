@@ -27,24 +27,6 @@ class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  // String _currentEmail = "";
-  // String _currentName = "";
-  // String _currentPassword = "";
-
-  // void saveTextInput() {
-  //   _currentEmail = _emailController.text;
-  //   _currentName = _nameController.text;
-  //   _currentPassword = _passwordController.text;
-  // }
-
-  // void signUpUser() {
-  //   authService.signUpUser(
-  //     context: context,
-  //     email: _currentEmail,
-  //     password: _currentPassword,
-  //     name: _currentName,
-  //   );
-  // }
 
   void signUpUser() {
     authService.signUpUser(
@@ -52,6 +34,14 @@ class _AuthScreenState extends State<AuthScreen> {
       email: _emailController.text,
       password: _passwordController.text,
       name: _nameController.text,
+    );
+  }
+
+  void signInUser() {
+    authService.signInUser(
+      context: context,
+      email: _emailController.text,
+      password: _passwordController.text,
     );
   }
 
@@ -204,7 +194,16 @@ class _AuthScreenState extends State<AuthScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        CustomButton(onTap: () {}, text: "Sign In")
+                        CustomButton(
+                            onTap: () {
+                              if (_signInFormKey.currentState!.validate()) {
+                                signInUser();
+                              } else {
+                                showSnackBar(context,
+                                    'The information you\'ve supplied is invalid.');
+                              }
+                            },
+                            text: "Sign In")
                       ],
                     ),
                   ),

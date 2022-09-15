@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 // TODO: Provide your own url
 
-String uri = 'http://192.168.1.33:3000'; //mongodb database uri
+String uri = 'http://172.20.10.3:3000'; // backend server url ip address and
+// port
 
 class GlobalVariables {
   // COLORS
