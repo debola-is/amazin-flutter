@@ -1,7 +1,7 @@
 const express = require('express');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
-const { default: mongoose } = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 
 const authRouter = express.Router();
@@ -52,17 +52,33 @@ authRouter.post('/api/signin', async (req, res)=>{
      */
     const {email, password} = req.body;
 
+    /* validation to verify post request contains all neccessary inputs */
     if(!email || !password ) {
         return res.status(400).json({
             error: "Incomplete parameters sent!"
         });
-    } // perform basic validation to verify post request contains all neccessary inputs
+    } // 
 
-    var existingUser = await User.findOne({email});
+    try{
+        var existingUser = await User.findOne({email});
     if(!existingUser) {
         return res.status(400).json({error: "This email address is not registered. Sign up?"});
     }
 
+    /* Compare hashed password and user plain text password input */
+     const validPass = await bcrypt.compare(password,existingUser.password);
+
+     if(!validPass) {
+        return res.status(400).json({error: "The password you entered is incorrect!"});
+     }
+        
+    jwt.sign({id: existingUser._id}, "passwordKey");
+    return res.json({token, ...existingUser._doc});
+    
+    }catch(e) {
+        return res.status(500).json({error: e.message}); 
+    }
+    
 
 },);
 
@@ -72,6 +88,8 @@ function encryptPassword(password) {
     var hash = bcrypt.hashSync(password, salt);
     return hash;
 }
+
+
 
 
 //To user authRouter in other files
