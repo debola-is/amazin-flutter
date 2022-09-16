@@ -1,10 +1,17 @@
 import 'package:amazin/constants/global_variables.dart';
 import 'package:amazin/features/auth/screens/auth_screen.dart';
+import 'package:amazin/features/auth/services/auth_service.dart';
+import 'package:amazin/providers/user_provider.dart';
 import 'package:amazin/router.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+    ),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -15,7 +22,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
+  final AuthService authService = AuthService();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    authService.getUserData(context: context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

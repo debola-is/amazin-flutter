@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const auth = require('./middlewares/auth_middleware');
 
 
 const authRouter = express.Router();
@@ -10,6 +11,7 @@ const authRouter = express.Router();
 //     res.json({user: "Debola"})
 // });
 
+/* Signs up a new user and if all goes well, stores the new user in db */
 authRouter.post('/api/signup', async (req,res)=>{
     /**
      * Get data from the client
@@ -42,7 +44,7 @@ authRouter.post('/api/signup', async (req,res)=>{
     }
 });
 
-
+/* Sign in existing user and returns jwt signed token in response body */
 authRouter.post('/api/signin', async (req, res)=>{
     /**
      * Get login details from request body
@@ -81,6 +83,33 @@ authRouter.post('/api/signin', async (req, res)=>{
     
 
 },);
+
+/* Verify user token supplied in request header and returns true or false based on result of verification */
+authRouter.post('/token/validation', async(req, res) =>{
+   try {
+    const token = req.header('user-auth-token');
+    console.log(token);
+    if (!token) return res.json(false);
+    const isVerified = jwt.verify(token, "passwordKey");
+    if (!isVerified) return res.json(false);
+
+    const user = await User.findById(isVerified.id);
+    if(!user) return res.json(false);
+
+    return res.json(true);
+   }
+   catch(e) {
+    res.status(400).json({error: e.message});
+   }
+})
+
+
+/* gets user data */
+authRouter.get('/', auth, async (req, res)=> {
+    const user = await User.findById(req.user);
+    res.json({...user._doc, token});	
+
+})
 
 
 function encryptPassword(password) {
