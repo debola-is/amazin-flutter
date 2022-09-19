@@ -4,7 +4,6 @@ import 'package:amazin/features/cart/screens/cart_screen.dart';
 import 'package:amazin/features/home/home_screen.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class BottomBar extends StatefulWidget {
   static const String routeName = '/nav-bar';

@@ -1,6 +1,6 @@
 import 'package:amazin/common/scroll_behaviour.dart';
 import 'package:amazin/constants/global_variables.dart';
-import 'package:amazin/features/account/widgets/product.dart';
+import 'package:amazin/features/account/widgets/single_product.dart';
 import 'package:flutter/material.dart';
 
 class Orders extends StatefulWidget {
@@ -54,7 +54,7 @@ class _OrdersState extends State<Orders> {
               physics: const BouncingScrollPhysics(),
               itemCount: tempList.length,
               itemBuilder: (context, index) {
-                return Product(
+                return SingleProduct(
                   image: tempList[index],
                 );
               },

@@ -1,5 +1,4 @@
 import 'package:amazin/constants/global_variables.dart';
-import 'package:amazin/constants/utils.dart';
 import 'package:amazin/features/home/widgets/address_box.dart';
 import 'package:amazin/features/home/widgets/carousel.dart';
 import 'package:amazin/features/home/widgets/categories.dart';

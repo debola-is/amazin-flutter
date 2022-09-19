@@ -6,7 +6,6 @@ import 'package:amazin/features/auth/services/auth_service.dart';
 import 'package:amazin/providers/user_provider.dart';
 import 'package:amazin/router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 void main() {

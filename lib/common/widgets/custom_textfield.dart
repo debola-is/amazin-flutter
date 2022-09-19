@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final int maxLines;
-  const CustomTextField(
-      {Key? key,
-      required this.controller,
-      required this.hintText,
-      this.maxLines = 1})
-      : super(key: key);
+  final TextInputType inputType;
+  const CustomTextField({
+    Key? key,
+    required this.controller,
+    required this.hintText,
+    this.maxLines = 1,
+    this.inputType = TextInputType.text,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +20,7 @@ class CustomTextField extends StatelessWidget {
     // be able to perform certain input validation.
     return TextFormField(
       controller: controller,
+      keyboardType: inputType,
       decoration: InputDecoration(
         hintText: hintText,
         border: const OutlineInputBorder(

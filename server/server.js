@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const adminRouter = require('./routes/admin');
 const authRouter= require('./routes/auth');
 
 // TODO: Create your own mogodb cluster uri from mongodb.com
@@ -10,7 +11,7 @@ const db = "mongodb://debola:pingmenot@ac-evsdkma-shard-00-00.zbnsvhm.mongodb.ne
 // For testing on an emulator, the IP adress parmaeter should be used in the 
 // app.listen call back.
 const PORT   = 3000;
-const app = express();
+const app = express(); 
 
 
 /**
@@ -21,6 +22,7 @@ use a middleware
 */
 app.use(express.json())
 app.use(authRouter); 
+app.use(adminRouter);
 
 
 //Database Connnection

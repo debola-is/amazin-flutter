@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:amazin/common/widgets/custom_button.dart';
 import 'package:amazin/common/widgets/custom_textfield.dart';
 import 'package:amazin/constants/utils.dart';
+import 'package:amazin/features/admin/services/admin_services.dart';
 import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -24,6 +25,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
+  final AdminServices adminServices = AdminServices();
+  final _adminProductFormKey = GlobalKey<FormState>();
+
   String category = 'Mobiles';
   List<File> images = [];
 
@@ -40,6 +44,28 @@ class _AddProductScreenState extends State<AddProductScreen> {
     setState(() {
       images = result;
     });
+  }
+
+  void sellProduct() {
+    if (_adminProductFormKey.currentState!.validate() && images.isNotEmpty) {
+      //Because form validation does not cover our image selection, we also need to chack if selected images is not empty.
+      adminServices.sellProduct(
+        context: context,
+        name: _productNameController.text,
+        description: _descriptionController.text,
+        price: double.parse(
+          _priceController.text.replaceAll(',', '').replaceAll(' ', ''),
+        ),
+        quantity: double.parse(
+          _quantityController.text
+              .replaceAll(',', '')
+              .replaceAll(' ', '')
+              .replaceAll('.', ''),
+        ),
+        category: category,
+        images: images,
+      );
+    }
   }
 
   void deleteImage(File image) {
@@ -98,9 +124,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
       ),
       body: SingleChildScrollView(
         child: Form(
+          key: _adminProductFormKey,
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 10,
+            ).copyWith(
+              bottom: 20,
             ),
             child: Column(
               children: [
@@ -193,6 +222,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 CustomTextField(
                   controller: _descriptionController,
                   hintText: 'Description',
+                  inputType: TextInputType.multiline,
                   maxLines: 7,
                 ),
                 const SizedBox(
@@ -201,6 +231,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 CustomTextField(
                   controller: _priceController,
                   hintText: 'Price',
+                  inputType: TextInputType.number,
                 ),
                 const SizedBox(
                   height: 10,
@@ -208,6 +239,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 CustomTextField(
                   controller: _quantityController,
                   hintText: 'Quantity',
+                  inputType: TextInputType.number,
                 ),
                 SizedBox(
                   width: double.infinity,
@@ -230,7 +262,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                 ),
                 CustomButton(
-                  onTap: () {},
+                  onTap: sellProduct,
                   text: 'Add',
                 )
               ],

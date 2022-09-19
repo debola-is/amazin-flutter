@@ -5,7 +5,7 @@ import '../../../constants/global_variables.dart';
 PreferredSizeWidget getAdminAppbar() {
   return PreferredSize(
     preferredSize: const Size.fromHeight(
-      60,
+      50,
     ),
     child: AppBar(
       flexibleSpace: Container(
