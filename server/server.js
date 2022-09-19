@@ -10,7 +10,6 @@ const db = "mongodb://debola:pingmenot@ac-evsdkma-shard-00-00.zbnsvhm.mongodb.ne
 // For testing on an emulator, the IP adress parmaeter should be used in the 
 // app.listen call back.
 const PORT   = 3000;
-// const IP = "172.20.10.3";
 const app = express();
 
 

@@ -47,5 +47,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+<string>App needs access to photo library in order for admin users to be able to add images to new product while uploading a new product</string>
 </dict>
 </plist>

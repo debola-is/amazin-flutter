@@ -1,11 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
-
+import 'package:amazin/common/widgets/bottom_bar.dart';
 import 'package:amazin/constants/error_handling.dart';
 import 'package:amazin/constants/global_variables.dart';
 import 'package:amazin/constants/utils.dart';
-import 'package:amazin/features/home/home_screen.dart';
 import 'package:amazin/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -103,7 +102,7 @@ class AuthService {
           await prefs.setString(
               'user-auth-token', jsonDecode(res.body)['token']);
           Navigator.pushNamedAndRemoveUntil(
-              context, HomeScreen.routeName, (route) => false);
+              context, BottomBar.routeName, (route) => false);
         },
       );
     } catch (e) {
@@ -115,8 +114,7 @@ class AuthService {
   }
 
   void getUserData({
-    ///posts user supplied info into database, handles error also by displaying
-    ///appropriate feedback in snackbars in the current build context.
+    ///posts user supplied info into database, handles error also by displaying appropriate feedback in snackbars in the current build context.
     required BuildContext context,
   }) async {
     try {
@@ -124,29 +122,29 @@ class AuthService {
       String? token = prefs.getString('user-auth-token');
 
       if (token == null) {
-        prefs.setString('user-auth-token', '');
-        var tokenVerificationResult = await http.post(
-          Uri.parse('$uri/token/validation'),
+        await prefs.setString('user-auth-token', '');
+      }
+      var tokenVerificationResult = await http.post(
+        Uri.parse('$uri/token/validation'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'user-auth-token': token!,
+        },
+      );
+
+      var response = jsonDecode(tokenVerificationResult.body);
+
+      if (response == true) {
+        http.Response userResponse = await http.get(
+          Uri.parse('$uri/'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
-            'user-auth-token': token!,
+            'user-auth-token': token,
           },
         );
 
-        var response = jsonDecode(tokenVerificationResult.body);
-
-        if (response == true) {
-          http.Response userResponse = await http.get(
-            Uri.parse('$uri/'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              'user-auth-token': token,
-            },
-          );
-
-          var userProvider = Provider.of<UserProvider>(context, listen: false);
-          userProvider.setUser(userResponse.body);
-        }
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.setUser(userResponse.body);
       }
     } catch (e) {
       showSnackBar(

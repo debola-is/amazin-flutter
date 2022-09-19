@@ -37,7 +37,7 @@ class User {
       id: map['_id'] ?? '',
       name: map['name'] ?? '',
       password: map['password'] ?? '',
-      type: map['type'] ?? '',
+      type: map['userType'] ?? '',
       token: map['token'] ?? '',
       address: map['address'] ?? '',
       email: map['email'] ?? '',

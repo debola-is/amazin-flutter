@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 /* for android emulators, for some reason you have to input the Ip address of the machine
 running the server (you can get this on windows with ipconfig command in terminal, ios simulators
 should run just fine with localhost:3000)*/
-String uri = 'http://192.168.1.29:3000'; // backend server url ip address and
+String uri = 'http://172.20.10.3:3000'; // backend server url ip address and
 // port
 
 class GlobalVariables {
@@ -35,23 +35,23 @@ class GlobalVariables {
   static const List<Map<String, String>> categoryImages = [
     {
       'title': 'Mobiles',
-      'image': 'assets/images/mobiles.jpeg',
+      'image': 'lib/assets/images/mobiles.jpeg',
     },
     {
       'title': 'Essentials',
-      'image': 'assets/images/essentials.jpeg',
+      'image': 'lib/assets/images/essentials.jpeg',
     },
     {
       'title': 'Appliances',
-      'image': 'assets/images/appliances.jpeg',
+      'image': 'lib/assets/images/appliances.jpeg',
     },
     {
       'title': 'Books',
-      'image': 'assets/images/books.jpeg',
+      'image': 'lib/assets/images/books.jpeg',
     },
     {
       'title': 'Fashion',
-      'image': 'assets/images/fashion.jpeg',
+      'image': 'lib/assets/images/fashion.jpeg',
     },
   ];
 }
