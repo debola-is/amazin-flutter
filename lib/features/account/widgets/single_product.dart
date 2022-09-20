@@ -24,6 +24,20 @@ class SingleProduct extends StatelessWidget {
             image,
             fit: BoxFit.fitHeight,
             width: 180,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              );
+            },
+            frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+              return child;
+            },
           ),
         ),
       ),
