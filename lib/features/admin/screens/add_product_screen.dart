@@ -41,15 +41,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   void getImages() async {
     var result = await selectImages();
-    setState(() {
-      images = result;
-    });
+    if (result.length + images.length < 11) {
+      images.addAll(result);
+
+      setState(() {});
+      return;
+    }
+// ignore: use_build_context_synchronously
+    showSnackBar(context, "You can only add a maximum of 10 product pictures");
   }
 
   void sellProduct() {
     if (_adminProductFormKey.currentState!.validate() && images.isNotEmpty) {
       //Because form validation does not cover our image selection, we also need to chack if selected images is not empty.
-      adminServices.sellProduct(
+      adminServices.addNewProduct(
         context: context,
         name: _productNameController.text,
         description: _descriptionController.text,
@@ -78,11 +83,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   Widget displayImagesCount() {
     int count = images.length;
-    String noun = count > 1 ? 'images' : 'image';
+    String text = count > 0
+        ? count > 1
+            ? '$count images selected'
+            : '$count image selected'
+        : 'No image selected';
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: Text(
-        '$count $noun selected',
+        text,
         style: TextStyle(
           fontSize: 12,
           color: GlobalVariables.selectedNavBarColor,
@@ -105,7 +114,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(
-          60,
+          50,
         ),
         child: AppBar(
           flexibleSpace: Container(
@@ -150,17 +159,38 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                     width: double.infinity,
                                   ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    deleteImage(i);
-                                  },
-                                  child: Badge(
-                                    badgeColor: Colors.white,
-                                    position: BadgePosition.topStart(),
-                                    badgeContent: const Icon(
-                                      Icons.delete_outline,
-                                      size: 20,
-                                      color: Colors.cyan,
+                                Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      deleteImage(i);
+                                    },
+                                    child: Badge(
+                                      badgeColor: Colors.white,
+                                      position: BadgePosition.topStart(),
+                                      badgeContent: const Icon(
+                                        Icons.delete_outline,
+                                        size: 20,
+                                        color: Colors.cyan,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 45,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      getImages();
+                                    },
+                                    child: Badge(
+                                      badgeColor: Colors.white,
+                                      position: BadgePosition.topStart(),
+                                      badgeContent: const Icon(
+                                        Icons.add_a_photo_outlined,
+                                        size: 20,
+                                        color: Colors.cyan,
+                                      ),
                                     ),
                                   ),
                                 ),
