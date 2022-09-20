@@ -14,7 +14,7 @@ const String _cloudname = 'dwiltileg';
 const String _uploadPreset = 't0hl9qse';
 
 class AdminServices {
-  void sellProduct({
+  void addNewProduct({
     required BuildContext context,
     required String name,
     required String description,
@@ -103,5 +103,30 @@ class AdminServices {
     }
 
     return allProducts;
+  }
+
+  void deleteProduct(
+      BuildContext context, String productId, VoidCallback onSuccess) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    try {
+      http.Response response = await http.delete(
+        Uri.parse('$uri/admin/delete-product/$productId'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'user-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandler(
+        response: response,
+        context: context,
+        onSuccess: onSuccess,
+      );
+    } catch (e) {
+      showSnackBar(
+        context,
+        e.toString(),
+      );
+    }
   }
 }
