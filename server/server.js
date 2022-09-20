@@ -20,7 +20,7 @@ data moves from CLient -> Server -> Client
 in order to manipulate the data before sending back to the client, we need to 
 use a middleware
 */
-app.use(express.json())
+app.use(express.json());
 app.use(authRouter); 
 app.use(adminRouter);
 
