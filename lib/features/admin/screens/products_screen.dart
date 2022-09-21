@@ -7,6 +7,7 @@ import 'package:amazin/features/admin/widgets/admin_appbar.dart';
 import 'package:amazin/features/admin/widgets/loader.dart';
 import 'package:amazin/models/product.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'add_product_screen.dart';
 
@@ -20,6 +21,8 @@ class ProductsScreen extends StatefulWidget {
 class _ProductsScreenState extends State<ProductsScreen> {
   AdminServices adminServices = AdminServices();
   List<Product>? products;
+  bool isFABVisible = true;
+
   void goToAddProduct() {
     Navigator.pushNamed(context, AddProductScreen.routeName);
   }
@@ -135,79 +138,116 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return products == null
-        ? const Loader()
-        : Scaffold(
-            appBar: getAdminAppbar(),
-            body: Padding(
+    return Scaffold(
+      appBar: getAdminAppbar(),
+      body: products == null
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Loading all products, please wait..',
+                  style: TextStyle(
+                    color: GlobalVariables.selectedNavBarColor,
+                    fontSize: 12,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Loader(),
+              ],
+            )
+          : Padding(
               padding: const EdgeInsets.all(10.0),
               child: RefreshIndicator(
                 displacement: 10,
                 onRefresh: getProducts,
                 child: ScrollConfiguration(
                   behavior: MyCustomScrollBehaviour(),
-                  child: GridView.builder(
-                      itemCount: products!.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                      ),
-                      itemBuilder: (context, index) {
-                        final productData = products![index];
-                        return Column(
-                          children: [
-                            SizedBox(
-                              height: 140,
-                              child: SingleProduct(
-                                image: productData.images[0],
+                  child: NotificationListener<UserScrollNotification>(
+                    onNotification: (notification) {
+                      if (notification.direction == ScrollDirection.forward) {
+                        if (!isFABVisible) setState(() => isFABVisible = true);
+                      } else if (notification.direction ==
+                          ScrollDirection.reverse) {
+                        if (isFABVisible) setState(() => isFABVisible = false);
+                      }
+
+                      return true;
+                    },
+                    child: GridView.builder(
+                        itemCount: products!.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                        ),
+                        itemBuilder: (context, index) {
+                          final productData = products![index];
+                          return Column(
+                            children: [
+                              SizedBox(
+                                height: MediaQuery.of(context).size.width / 3,
+                                child: SingleProduct(
+                                  image: productData.images[0],
+                                ),
                               ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        productData.name,
-                                        style: TextStyle(
-                                          color: GlobalVariables
-                                              .selectedNavBarColor,
-                                          fontSize: 12,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(left: 10, top: 5),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            productData.name,
+                                            style: TextStyle(
+                                              color: GlobalVariables
+                                                  .selectedNavBarColor,
+                                              fontSize: 12,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                          Text(
+                                            productData.description,
+                                            style: const TextStyle(
+                                              color: Colors.black45,
+                                              fontSize: 10,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                          ),
+                                        ],
                                       ),
-                                      Text(
-                                        productData.description,
-                                        style: const TextStyle(
-                                          color: Colors.black45,
-                                          fontSize: 10,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        confirmDelete(productData);
+                                      },
+                                      icon: const Icon(
+                                        Icons.delete_outline,
+                                        size: 15,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                                IconButton(
-                                  onPressed: () {
-                                    confirmDelete(productData);
-                                  },
-                                  icon: const Icon(
-                                    Icons.delete_outline,
-                                    size: 15,
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        );
-                      }),
+                              )
+                            ],
+                          );
+                        }),
+                  ),
                 ),
               ),
             ),
-            floatingActionButton: FloatingActionButton(
+      floatingActionButton: !isFABVisible
+          ? null
+          : FloatingActionButton(
               onPressed: () {
                 goToAddProduct();
               },
@@ -216,8 +256,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 Icons.add,
               ),
             ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
-          );
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
   }
 }
