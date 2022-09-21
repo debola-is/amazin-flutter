@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const adminRouter = require('./routes/admin');
 const authRouter= require('./routes/auth');
+const productRouter = require('./routes/product');
 
 // TODO: Create your own mogodb cluster uri from mongodb.com
 // TIP: When connecting to mongodb through clients native driver, use node.js 2.2.12 or older, SVR is probably not working due to Mongoose. 
@@ -23,6 +24,7 @@ use a middleware
 app.use(express.json());
 app.use(authRouter); 
 app.use(adminRouter);
+app.use(productRouter);
 
 
 //Database Connnection
