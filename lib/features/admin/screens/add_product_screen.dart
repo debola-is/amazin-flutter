@@ -55,21 +55,26 @@ class _AddProductScreenState extends State<AddProductScreen> {
     if (_adminProductFormKey.currentState!.validate() && images.isNotEmpty) {
       //Because form validation does not cover our image selection, we also need to chack if selected images is not empty.
       adminServices.addNewProduct(
-        context: context,
-        name: _productNameController.text,
-        description: _descriptionController.text,
-        price: double.parse(
-          _priceController.text.replaceAll(',', '').replaceAll(' ', ''),
-        ),
-        quantity: double.parse(
-          _quantityController.text
-              .replaceAll(',', '')
-              .replaceAll(' ', '')
-              .replaceAll('.', ''),
-        ),
-        category: category,
-        images: images,
-      );
+          context: context,
+          name: _productNameController.text,
+          description: _descriptionController.text,
+          price: double.parse(
+            _priceController.text.replaceAll(',', '').replaceAll(' ', ''),
+          ),
+          quantity: double.parse(
+            _quantityController.text
+                .replaceAll(',', '')
+                .replaceAll(' ', '')
+                .replaceAll('.', ''),
+          ),
+          category: category,
+          images: images,
+          onSuccess: () {
+            showSnackBar(context, 'Product Added Successfully');
+            Navigator.pop(context);
+            adminServices.getAllProducts(context: context);
+            setState(() {});
+          });
     }
   }
 

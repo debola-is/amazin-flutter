@@ -22,6 +22,7 @@ class AdminServices {
     required double quantity,
     required String category,
     required List<File> images,
+    required VoidCallback onSuccess,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     try {
@@ -54,12 +55,7 @@ class AdminServices {
               body: product.toJson());
 
       httpErrorHandler(
-          response: response,
-          context: context,
-          onSuccess: () {
-            showSnackBar(context, 'Product Added Successfully');
-            Navigator.pop(context);
-          });
+          response: response, context: context, onSuccess: onSuccess);
     } catch (e) {
       showSnackBar(
         context,
@@ -68,7 +64,9 @@ class AdminServices {
     }
   }
 
-  Future<List<Product>> getAllProducts(BuildContext context) async {
+  Future<List<Product>> getAllProducts({
+    required BuildContext context,
+  }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     List<Product> allProducts = [];
     try {
@@ -105,8 +103,11 @@ class AdminServices {
     return allProducts;
   }
 
-  void deleteProduct(
-      BuildContext context, String productId, VoidCallback onSuccess) async {
+  void deleteProduct({
+    required BuildContext context,
+    required String productId,
+    required VoidCallback onSuccess,
+  }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     try {
       http.Response response = await http.delete(

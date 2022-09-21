@@ -25,15 +25,19 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   Future<void> getProducts() async {
-    products = await adminServices.getAllProducts(context);
+    products = await adminServices.getAllProducts(context: context);
     setState(() {});
   }
 
   void deleteProduct(Product product) {
-    adminServices.deleteProduct(context, product.id!, () {
-      showSnackBar(context, '${product.name} has been deleted successfully!');
-      getProducts();
-    });
+    adminServices.deleteProduct(
+      context: context,
+      productId: product.id!,
+      onSuccess: () {
+        showSnackBar(context, '${product.name} has been deleted successfully!');
+        getProducts();
+      },
+    );
   }
 
   Future<void> confirmDelete(Product product) {

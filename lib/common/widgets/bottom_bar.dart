@@ -1,7 +1,7 @@
 import 'package:amazin/constants/global_variables.dart';
 import 'package:amazin/features/account/screens/account_screen.dart';
 import 'package:amazin/features/cart/screens/cart_screen.dart';
-import 'package:amazin/features/home/home_screen.dart';
+import 'package:amazin/features/home/screens/home_screen.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 
