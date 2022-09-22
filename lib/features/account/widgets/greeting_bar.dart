@@ -1,4 +1,5 @@
 import 'package:amazin/constants/global_variables.dart';
+import 'package:amazin/constants/utils.dart';
 import 'package:amazin/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,7 @@ class GreetingBar extends StatelessWidget {
         left: 20,
         bottom: 5,
       ),
-      width: MediaQuery.of(context).size.width,
+      width: screenWidth(context),
       decoration: const BoxDecoration(gradient: GlobalVariables.appBarGradient),
       child: RichText(
         text: TextSpan(
