@@ -30,3 +30,11 @@ Future<List<File>> selectImages() async {
   }
   return images;
 }
+
+double screenWidth(BuildContext context) {
+  return MediaQuery.of(context).size.width;
+}
+
+double screenHeight(BuildContext context) {
+  return MediaQuery.of(context).size.height;
+}
