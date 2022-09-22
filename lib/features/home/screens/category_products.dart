@@ -1,6 +1,7 @@
 import 'package:amazin/constants/global_variables.dart';
 import 'package:amazin/features/admin/widgets/loader.dart';
 import 'package:amazin/features/home/services/home_services.dart';
+import 'package:amazin/features/product_details/screens/product_details_screen.dart';
 import 'package:amazin/models/product.dart';
 import 'package:flutter/material.dart';
 
@@ -93,73 +94,79 @@ class _CategoryProductsState extends State<CategoryProducts> {
                           ),
                           itemBuilder: (context, index) {
                             final product = productsList![index];
-                            return Column(
-                              children: [
-                                SizedBox(
-                                  height: 130,
-                                  width: 130,
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.black12,
-                                        width: 0.5,
+                            return GestureDetector(
+                              onTap: () {
+                                navigateToProductDetails(product);
+                              },
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 130,
+                                    width: 130,
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.black12,
+                                          width: 0.5,
+                                        ),
                                       ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10),
-                                      child: Image.network(
-                                        product.images[0],
-                                        loadingBuilder:
-                                            (context, child, loadingProgress) {
-                                          if (loadingProgress == null) {
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Image.network(
+                                          product.images[0],
+                                          loadingBuilder: (context, child,
+                                              loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return Center(
+                                              child: CircularProgressIndicator(
+                                                value: loadingProgress
+                                                            .expectedTotalBytes !=
+                                                        null
+                                                    ? loadingProgress
+                                                            .cumulativeBytesLoaded /
+                                                        loadingProgress
+                                                            .expectedTotalBytes!
+                                                    : null,
+                                              ),
+                                            );
+                                          },
+                                          frameBuilder: (context, child, frame,
+                                              wasSynchronouslyLoaded) {
                                             return child;
-                                          }
-                                          return Center(
-                                            child: CircularProgressIndicator(
-                                              value: loadingProgress
-                                                          .expectedTotalBytes !=
-                                                      null
-                                                  ? loadingProgress
-                                                          .cumulativeBytesLoaded /
-                                                      loadingProgress
-                                                          .expectedTotalBytes!
-                                                  : null,
-                                            ),
-                                          );
-                                        },
-                                        frameBuilder: (context, child, frame,
-                                            wasSynchronouslyLoaded) {
-                                          return child;
-                                        },
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      product.name,
-                                      style: TextStyle(
-                                        color:
-                                            GlobalVariables.selectedNavBarColor,
-                                        fontSize: 12,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        product.name,
+                                        style: TextStyle(
+                                          color: GlobalVariables
+                                              .selectedNavBarColor,
+                                          fontSize: 12,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
                                       ),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-                                    Text(
-                                      product.description,
-                                      style: const TextStyle(
-                                        color: Colors.black45,
-                                        fontSize: 10,
+                                      Text(
+                                        product.description,
+                                        style: const TextStyle(
+                                          color: Colors.black45,
+                                          fontSize: 10,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
                                       ),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                    ),
-                                  ],
-                                )
-                              ],
+                                    ],
+                                  )
+                                ],
+                              ),
                             );
                           },
                         ),
@@ -236,5 +243,10 @@ class _CategoryProductsState extends State<CategoryProducts> {
                   ),
       ),
     );
+  }
+
+  void navigateToProductDetails(Product product) {
+    Navigator.pushNamed(context, ProductDetailsScreen.routeName,
+        arguments: product);
   }
 }
