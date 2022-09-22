@@ -13,7 +13,7 @@ class SearchServices {
     List<Product> allProducts = [];
     try {
       http.Response response = await http.get(
-        Uri.parse('$uri/api/products/search/?query=$searchQuery'),
+        Uri.parse('$uri/api/products/search/$searchQuery'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
