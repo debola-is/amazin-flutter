@@ -49,7 +49,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             insetPadding: EdgeInsets.symmetric(
-                vertical: MediaQuery.of(context).size.height / 5),
+              vertical: screenHeight(context) / 5,
+            ),
             icon: Icon(
               Icons.warning_outlined,
               color: GlobalVariables.selectedNavBarColor,
@@ -187,7 +188,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           return Column(
                             children: [
                               SizedBox(
-                                height: MediaQuery.of(context).size.width / 3,
+                                height: screenWidth(context) / 3,
                                 child: SingleProduct(
                                   image: productData.images[0],
                                 ),

@@ -58,7 +58,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 ),
               ),
               child: const Icon(
-                Icons.home_outlined,
+                Icons.shopping_bag_outlined,
               ),
             ),
           ),
@@ -78,7 +78,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 ),
               ),
               child: const Icon(
-                Icons.person_outlined,
+                Icons.analytics_outlined,
               ),
             ),
           ),
@@ -98,7 +98,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 ),
               ),
               child: const Icon(
-                Icons.person_outlined,
+                Icons.shopping_cart_outlined,
               ),
             ),
           ),
