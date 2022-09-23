@@ -35,6 +35,7 @@ class _SearchScreenState extends State<SearchScreen> {
           60,
         ),
         child: AppBar(
+          automaticallyImplyLeading: false,
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               gradient: GlobalVariables.appBarGradient,

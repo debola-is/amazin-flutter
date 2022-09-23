@@ -5,6 +5,7 @@ import 'package:amazin/features/search/screens/search_screen.dart';
 import 'package:amazin/models/product.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   static const String routeName = '/productDetails';
@@ -31,6 +32,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           60,
         ),
         child: AppBar(
+          automaticallyImplyLeading: false,
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               gradient: GlobalVariables.appBarGradient,
@@ -196,9 +198,42 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: CustomButton(
                 onTap: (() {}),
                 text: "Add to cart",
-                color: Color.fromRGBO(254, 216, 19, 1),
+                color: const Color.fromRGBO(254, 216, 19, 1),
               ),
-            )
+            ),
+            const Divider(
+              height: 20,
+              thickness: 5,
+              color: Colors.black12,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                "Rate the product",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            RatingBar.builder(
+                initialRating: 0,
+                minRating: 1,
+                direction: Axis.horizontal,
+                itemCount: 5,
+                itemPadding: const EdgeInsets.symmetric(horizontal: 4),
+                allowHalfRating: true,
+                itemBuilder: (context, _) {
+                  return const Icon(
+                    Icons.star,
+                    color: GlobalVariables.secondaryColor,
+                  );
+                },
+                onRatingUpdate: (value) {})
           ],
         ),
       ),
