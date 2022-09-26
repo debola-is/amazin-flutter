@@ -1,9 +1,12 @@
+import 'package:amazin/common/scroll_behaviour.dart';
 import 'package:amazin/constants/global_variables.dart';
 import 'package:amazin/features/home/widgets/address_box.dart';
 import 'package:amazin/features/home/widgets/carousel.dart';
 import 'package:amazin/features/home/widgets/categories.dart';
 import 'package:amazin/features/home/widgets/deal_of_the_day.dart';
+import 'package:amazin/features/product_details/services/product_services.dart';
 import 'package:amazin/features/search/screens/search_screen.dart';
+import 'package:amazin/models/product.dart';
 import 'package:amazin/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -102,17 +105,20 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            if (user.name != "") const AddressBox(),
-            const SizedBox(
-              height: 10,
-            ),
-            const HomeCategories(),
-            const CarouselImages(),
-            const DealOfDay(),
-          ],
+      body: ScrollConfiguration(
+        behavior: MyCustomScrollBehaviour(),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              if (user.name != "") const AddressBox(),
+              const SizedBox(
+                height: 10,
+              ),
+              const HomeCategories(),
+              const CarouselImages(),
+              const DealOfDay(),
+            ],
+          ),
         ),
       ),
     );
