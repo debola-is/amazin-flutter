@@ -1,3 +1,4 @@
+import 'package:amazin/common/widgets/network_image.dart';
 import 'package:amazin/common/widgets/rating_stars.dart';
 import 'package:amazin/constants/utils.dart';
 import 'package:amazin/models/product.dart';
@@ -31,26 +32,8 @@ class SingleSearchProduct extends StatelessWidget {
             height: 135,
             width: 135,
             padding: const EdgeInsets.all(5),
-            child: Image.network(
-              product.images[0],
-              fit: BoxFit.contain,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) {
-                  return child;
-                }
-                return Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 3,
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
-                        : null,
-                  ),
-                );
-              },
-              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                return child;
-              },
+            child: CustomNetworkImage(
+              imageSource: product.images[0],
             ),
           ),
           Container(

@@ -1,4 +1,5 @@
 import 'package:amazin/common/scroll_behaviour.dart';
+import 'package:amazin/common/widgets/network_image.dart';
 import 'package:amazin/constants/global_variables.dart';
 import 'package:amazin/constants/utils.dart';
 import 'package:amazin/features/account/widgets/single_product.dart';
@@ -160,7 +161,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   Future<void> getProducts() async {
     products = await adminServices.getAllProducts(context: context);
-    setState(() {});
+
+    if (mounted) {
+      //Check to see if current widget is still mounted in the widget tree before calling set state so as to avoid memory leaks.
+      setState(() {});
+    }
   }
 
   void deleteProduct(Product product) {
@@ -210,9 +215,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   SizedBox(
                     height: screenHeight(context) / 7,
                     width: 100,
-                    child: Image.network(
-                      product.images[0],
-                      fit: BoxFit.contain,
+                    child: CustomNetworkImage(
+                      imageSource: product.images[0],
                     ),
                   ),
                   const SizedBox(

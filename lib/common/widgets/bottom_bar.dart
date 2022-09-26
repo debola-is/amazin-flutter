@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:amazin/constants/global_variables.dart';
 import 'package:amazin/features/account/screens/account_screen.dart';
 import 'package:amazin/features/cart/screens/cart_screen.dart';
@@ -103,7 +101,7 @@ class _BottomBarState extends State<BottomBar> {
               ),
               child: Badge(
                 elevation: 0,
-                padding: const EdgeInsets.all(0),
+                padding: const EdgeInsets.only(right: 10, top: 15),
                 badgeContent: Text(
                   userCartLength.toString(),
                   style: TextStyle(

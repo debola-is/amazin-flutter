@@ -22,6 +22,11 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     final user = context.watch<UserProvider>().user;
     final cartLength = user.cart.length;
+    double sum = 0;
+    user.cart
+        .map((e) => sum += e['quantity'] * (e['product']['price']).toDouble())
+        .toList();
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(
@@ -102,11 +107,13 @@ class _CartScreenState extends State<CartScreen> {
       body: Column(
         children: [
           const AddressBox(),
-          const CartSubtotal(),
+          CartSubtotal(
+            total: sum,
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: CustomButton(
-              onTap: navigateToAddressScreen,
+              onTap: (() => navigateToAddressScreen(sum)),
               text:
                   'Proceed to buy $cartLength ${cartLength > 1 ? "items" : "item"}',
               color: Colors.yellow.shade600,
@@ -144,10 +151,11 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  void navigateToAddressScreen() {
+  void navigateToAddressScreen(double total) {
     Navigator.pushNamed(
       context,
       AddressScreen.routeName,
+      arguments: total.toString(),
     );
   }
 }

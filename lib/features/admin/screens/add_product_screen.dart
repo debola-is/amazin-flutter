@@ -268,7 +268,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
     if (result.length + images.length < 11) {
       images.addAll(result);
 
-      setState(() {});
+      if (mounted) {
+        //Check to see if current widget is still mounted in the widget tree before calling set state so as to avoid memory leaks.
+        setState(() {});
+      }
       return;
     }
     showSnackBar(
@@ -307,9 +310,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   void deleteImage(File image) {
     if (images.isNotEmpty) {
-      setState(() {
-        images.remove(image);
-      });
+      if (mounted) {
+        setState(() {
+          images.remove(image);
+        });
+      }
     }
   }
 }

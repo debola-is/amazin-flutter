@@ -165,7 +165,11 @@ class _SearchScreenState extends State<SearchScreen> {
       context: context,
       searchQuery: widget.searchQuery,
     );
-    setState(() {});
+
+    if (mounted) {
+      //Check to see if current widget is still mounted in the widget tree before calling set state so as to avoid memory leaks.
+      setState(() {});
+    }
   }
 
   void navigateToSearchScreen(String query) {

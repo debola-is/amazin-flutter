@@ -1,3 +1,4 @@
+import 'package:amazin/common/widgets/network_image.dart';
 import 'package:amazin/constants/global_variables.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +12,9 @@ class CarouselImages extends StatelessWidget {
       items: GlobalVariables.carouselImages.map(
         (i) {
           return Builder(
-            builder: (BuildContext context) => Image.network(
-              i,
-              fit: BoxFit.fitWidth,
+            builder: (BuildContext context) => CustomNetworkImage(
+              imageSource: i,
+              imageFit: BoxFit.fitWidth,
             ),
           );
         },

@@ -1,12 +1,15 @@
 import 'package:amazin/common/widgets/custom_textfield.dart';
 import 'package:amazin/constants/global_variables.dart';
+import 'package:amazin/features/admin/widgets/loader.dart';
 import 'package:amazin/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
 
 class AddressScreen extends StatefulWidget {
   static const String routeName = '/address';
-  const AddressScreen({super.key});
+  final String totalAmount;
+  const AddressScreen({super.key, required this.totalAmount});
 
   @override
   State<AddressScreen> createState() => _AddressScreenState();
@@ -19,15 +22,24 @@ class _AddressScreenState extends State<AddressScreen> {
   final TextEditingController cityController = TextEditingController();
   final _addressFormKey = GlobalKey<FormState>();
 
+  List<PaymentItem> paymentItems = [];
+
   @override
   void initState() {
     super.initState();
+    paymentItems.add(
+      PaymentItem(
+        amount: widget.totalAmount,
+        label: 'Total Amount',
+        status: PaymentItemStatus.final_price,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     // var userAddress = context.watch<UserProvider>().user.address;
-    var userAddress = '3, Mureni Street, Isolo, Lagos';
+    var userAddress = '3, Fake address, Mainland, Lagos';
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(
@@ -122,12 +134,38 @@ class _AddressScreenState extends State<AddressScreen> {
                   ],
                 ),
               ),
+              const SizedBox(
+                height: 10,
+              ),
+              GooglePayButton(
+                paymentConfigurationAsset: 'gpay.json',
+                onPaymentResult: onGooglePayResult,
+                paymentItems: paymentItems,
+                width: double.infinity,
+                height: 50,
+                type: GooglePayButtonType.buy,
+                loadingIndicator: const Loader(),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ApplePayButton(
+                paymentConfigurationAsset: 'applepay.json',
+                onPaymentResult: onApplePayResult,
+                paymentItems: paymentItems,
+                width: double.infinity,
+                height: 50,
+                type: ApplePayButtonType.buy,
+              )
             ],
           ),
         ),
       ),
     );
   }
+
+  void onGooglePayResult(result) {}
+  void onApplePayResult(result) {}
 
   @override
   void dispose() {

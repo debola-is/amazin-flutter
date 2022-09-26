@@ -26,9 +26,11 @@ class _AdminScreenState extends State<AdminScreen> {
   ];
 
   void updatePage(int page) {
-    setState(() {
-      _page = page;
-    });
+    if (mounted) {
+      setState(() {
+        _page = page;
+      });
+    }
   }
 
   @override

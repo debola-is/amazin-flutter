@@ -3,31 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CartSubtotal extends StatelessWidget {
-  const CartSubtotal({super.key});
+  final double total;
+  const CartSubtotal({super.key, required this.total});
 
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<UserProvider>().user;
-    double sum = 0;
-    user.cart
-        .map((e) => sum += e['quantity'] * (e['product']['price']).toDouble())
-        .toList();
-
     return Container(
-      margin: const EdgeInsets.all(8),
-      child: Row(children: [
-        const Text(
-          'Subtotal ',
-          style: TextStyle(fontSize: 20),
-        ),
-        Text(
-          '\$$sum',
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Subtotal ',
+            style: TextStyle(fontSize: 16),
           ),
-        ),
-      ]),
+          Text(
+            '\$${total.toStringAsFixed(2)}',
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

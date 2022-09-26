@@ -1,4 +1,5 @@
 import 'package:amazin/common/scroll_behaviour.dart';
+import 'package:amazin/common/widgets/network_image.dart';
 import 'package:amazin/features/admin/widgets/loader.dart';
 import 'package:amazin/features/home/services/home_services.dart';
 import 'package:amazin/features/product_details/screens/product_details_screen.dart';
@@ -20,7 +21,10 @@ class _DealOfDayState extends State<DealOfDay> {
     product = await homeServices.getDailyDeal(
       context: context,
     );
-    setState(() {});
+    if (mounted) {
+      //Check to see if current widget is still mounted in the widget tree before calling set state so as to avoid memory leaks.
+      setState(() {});
+    }
   }
 
   void navigateToProductDetail() {
@@ -59,10 +63,9 @@ class _DealOfDayState extends State<DealOfDay> {
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30, vertical: 20),
-                          child: Image.network(
-                            product!.images[0],
+                          child: CustomNetworkImage(
+                            imageSource: product!.images[0],
                             height: 235,
-                            fit: BoxFit.fitHeight,
                           ),
                         ),
                         Container(
@@ -84,31 +87,30 @@ class _DealOfDayState extends State<DealOfDay> {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: ScrollConfiguration(
-                            behavior: MyCustomScrollBehaviour(),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              physics: const BouncingScrollPhysics(),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: product!.images
-                                    .map(
-                                      (e) => Image.network(
-                                        e,
-                                        fit: BoxFit.fitWidth,
-                                        width: 75,
-                                        height: 75,
-                                      ),
-                                    )
-                                    .toList(),
-                              ),
-                            ),
-                          ),
-                        ),
                       ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ScrollConfiguration(
+                      behavior: MyCustomScrollBehaviour(),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: product!.images
+                              .map(
+                                (e) => CustomNetworkImage(
+                                  imageSource: e,
+                                  imageFit: BoxFit.contain,
+                                  width: 75,
+                                  height: 75,
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
                     ),
                   ),
                   Container(

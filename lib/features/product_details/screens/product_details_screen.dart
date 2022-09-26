@@ -1,6 +1,9 @@
+import 'package:amazin/common/scroll_behaviour.dart';
 import 'package:amazin/common/widgets/custom_button.dart';
+import 'package:amazin/common/widgets/network_image.dart';
 import 'package:amazin/common/widgets/rating_stars.dart';
 import 'package:amazin/constants/global_variables.dart';
+import 'package:amazin/features/admin/widgets/loader.dart';
 import 'package:amazin/features/cart/services/cart_services.dart';
 import 'package:amazin/features/product_details/services/product_services.dart';
 import 'package:amazin/features/search/screens/search_screen.dart';
@@ -158,28 +161,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   items: widget.product.images.map(
                     (i) {
                       return Builder(
-                        builder: (BuildContext context) => Image.network(
-                          i,
-                          fit: BoxFit.cover,
+                        builder: (BuildContext context) => CustomNetworkImage(
+                          imageSource: i,
                           height: 300,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            }
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          },
-                          frameBuilder:
-                              (context, child, frame, wasSynchronouslyLoaded) {
-                            return child;
-                          },
                         ),
                       );
                     },
@@ -187,6 +171,35 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   options: CarouselOptions(
                     viewportFraction: 1,
                     height: 200,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ScrollConfiguration(
+                    behavior: MyCustomScrollBehaviour(),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: widget.product.images
+                            .map(
+                              (e) => Container(
+                                width: 75,
+                                height: 75,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black12)),
+                                child: CustomNetworkImage(
+                                  imageSource: e,
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
                   ),
                 ),
                 const Divider(

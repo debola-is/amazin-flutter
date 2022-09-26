@@ -1,3 +1,4 @@
+import 'package:amazin/common/widgets/network_image.dart';
 import 'package:amazin/constants/global_variables.dart';
 import 'package:amazin/features/admin/widgets/loader.dart';
 import 'package:amazin/features/home/services/home_services.dart';
@@ -29,7 +30,11 @@ class _CategoryProductsState extends State<CategoryProducts> {
   Future<void> getCategoryProducts() async {
     productsList = await homeServices.getProductForCategory(
         context: context, category: widget.category);
-    setState(() {});
+
+    if (mounted) {
+      //Check to see if current widget is still mounted in the widget tree before calling set state so as to avoid memory leaks.
+      setState(() {});
+    }
   }
 
   @override
@@ -111,30 +116,8 @@ class _CategoryProductsState extends State<CategoryProducts> {
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.all(10),
-                                        child: Image.network(
-                                          product.images[0],
-                                          loadingBuilder: (context, child,
-                                              loadingProgress) {
-                                            if (loadingProgress == null) {
-                                              return child;
-                                            }
-                                            return Center(
-                                              child: CircularProgressIndicator(
-                                                value: loadingProgress
-                                                            .expectedTotalBytes !=
-                                                        null
-                                                    ? loadingProgress
-                                                            .cumulativeBytesLoaded /
-                                                        loadingProgress
-                                                            .expectedTotalBytes!
-                                                    : null,
-                                              ),
-                                            );
-                                          },
-                                          frameBuilder: (context, child, frame,
-                                              wasSynchronouslyLoaded) {
-                                            return child;
-                                          },
+                                        child: CustomNetworkImage(
+                                          imageSource: product.images[0],
                                         ),
                                       ),
                                     ),
