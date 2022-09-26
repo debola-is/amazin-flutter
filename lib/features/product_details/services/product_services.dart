@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:amazin/constants/error_handling.dart';
 import 'package:amazin/constants/global_variables.dart';
 import 'package:amazin/constants/utils.dart';
@@ -36,12 +35,19 @@ class ProductServices {
         response: response,
         context: context,
         onSuccess: () {
-          showSnackBar(context,
-              'You have given ${product.name} $rating stars. Thanks for your feedback! 🙂');
+          showSnackBar(
+            context,
+            'You have given ${product.name} $rating stars. Thanks for your feedback! 🙂',
+            "success",
+          );
         },
       );
     } catch (e) {
-      showSnackBar(context, e.toString());
+      showSnackBar(
+        context,
+        e.toString(),
+        "error",
+      );
     }
   }
 }
