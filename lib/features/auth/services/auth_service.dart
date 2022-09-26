@@ -41,6 +41,7 @@ class AuthService {
       token: '',
       address: '',
       email: email,
+      cart: [],
     );
     if (validPassword(
       password: password,
@@ -61,6 +62,7 @@ class AuthService {
             showSnackBar(
               context,
               'Account created! Login with the same credentials',
+              "success",
             );
           },
         );
@@ -68,10 +70,15 @@ class AuthService {
         showSnackBar(
           context,
           e.toString(),
+          "error",
         );
       }
     } else {
-      showSnackBar(context, "Passowrd should be 7-15 characters");
+      showSnackBar(
+        context,
+        "Passowrd should be 7-15 characters",
+        "info",
+      );
     }
   }
 
@@ -109,6 +116,7 @@ class AuthService {
       showSnackBar(
         context,
         e.toString(),
+        "error",
       );
     }
   }
@@ -150,6 +158,7 @@ class AuthService {
       showSnackBar(
         context,
         e.toString(),
+        "error",
       );
     }
   }
