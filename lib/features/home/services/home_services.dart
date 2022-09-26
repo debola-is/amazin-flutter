@@ -38,9 +38,46 @@ class HomeServices {
       showSnackBar(
         context,
         e.toString(),
+        "error",
       );
     }
 
     return allProducts;
+  }
+
+  Future<Product> getDailyDeal({
+    required BuildContext context,
+  }) async {
+    Product product = Product(
+      name: '',
+      description: '',
+      price: 0,
+      quantity: 0,
+      category: '',
+      images: [],
+    );
+    try {
+      http.Response response = await http.get(
+        Uri.parse('$uri/api/products/get/deal-of-the-day'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+
+      httpErrorHandler(
+        response: response,
+        context: context,
+        onSuccess: () {
+          product = Product.fromJson(response.body);
+        },
+      );
+    } catch (e) {
+      showSnackBar(
+        context,
+        e.toString(),
+        "error",
+      );
+    }
+    return product;
   }
 }
