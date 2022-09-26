@@ -1,5 +1,5 @@
 const express = require('express');
-const Product = require('../models/product_model');
+const {Product} = require('../models/product_model');
 const adminRouter = express.Router();
 const admin = require('../middlewares/admin_middleware');
 const mongoose = require('mongoose');
@@ -46,17 +46,11 @@ adminRouter.delete('/admin/delete-product/:productId', async(req, res)=> {
         return res.status(400).json({error: "Bad request parameters!"});
     }
     try{
-        id = new mongoose.Types.ObjectId(productId);
-        let product = await Product.findById(id);
+        
+        let product = await Product.findByIdAndDelete(productId);
 
-        if(!product) {
-            return res.status(404).json({error: "Product does not exist!"});
-        }
-
-        Product.deleteOne(id)
-        .then(()=>{
-            return res.json({msg: "Product deleted successfully!"});
-        })
+        return res.json({msg: "Product deleted successfully!"});
+        
     }
     catch(e) {
         return res.status(500).json({error: e.message});

@@ -57,10 +57,7 @@ class AdminServices {
       httpErrorHandler(
           response: response, context: context, onSuccess: onSuccess);
     } catch (e) {
-      showSnackBar(
-        context,
-        e.toString(),
-      );
+      showSnackBar(context, e.toString(), "error");
     }
   }
 
@@ -97,6 +94,7 @@ class AdminServices {
       showSnackBar(
         context,
         e.toString(),
+        "error",
       );
     }
 
@@ -127,6 +125,7 @@ class AdminServices {
       showSnackBar(
         context,
         e.toString(),
+        "error",
       );
     }
   }
