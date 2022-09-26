@@ -1,7 +1,9 @@
 import 'package:amazin/common/widgets/rating_stars.dart';
 import 'package:amazin/constants/utils.dart';
 import 'package:amazin/models/product.dart';
+import 'package:amazin/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SingleSearchProduct extends StatelessWidget {
   final Product product;
@@ -12,6 +14,15 @@ class SingleSearchProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double totalRating = 0;
+    double averageRating = 0;
+    for (int i = 0; i < product.rating!.length; i++) {
+      totalRating += product.rating![i].rating;
+    }
+
+    if (totalRating != 0) {
+      averageRating = totalRating / product.rating!.length;
+    }
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       child: Row(
@@ -65,7 +76,16 @@ class SingleSearchProduct extends StatelessWidget {
                       fontSize: 16, fontWeight: FontWeight.bold),
                   maxLines: 2,
                 ),
-                const RatingStars(rating: 4.0),
+                averageRating == 0
+                    ? const Text(
+                        'No ratings yet..',
+                        style: TextStyle(
+                          color: Colors.teal,
+                          fontStyle: FontStyle.italic,
+                          fontSize: 12,
+                        ),
+                      )
+                    : RatingStars(rating: averageRating),
                 const Text(
                   'Eligible for FREE shipping',
                   style: TextStyle(fontSize: 12),
