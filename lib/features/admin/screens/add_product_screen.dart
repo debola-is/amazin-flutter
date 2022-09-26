@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:amazin/common/widgets/custom_button.dart';
@@ -269,7 +271,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
       setState(() {});
       return;
     }
-// ignore: use_build_context_synchronously
     showSnackBar(
         context, "You can only add a maximum of 10 product pictures", "info");
   }

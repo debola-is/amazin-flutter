@@ -38,6 +38,7 @@ class SearchServices {
       showSnackBar(
         context,
         e.toString(),
+        "error",
       );
     }
 
