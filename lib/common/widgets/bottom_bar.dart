@@ -1,9 +1,13 @@
+import 'dart:ui';
+
 import 'package:amazin/constants/global_variables.dart';
 import 'package:amazin/features/account/screens/account_screen.dart';
 import 'package:amazin/features/cart/screens/cart_screen.dart';
 import 'package:amazin/features/home/screens/home_screen.dart';
+import 'package:amazin/providers/user_provider.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BottomBar extends StatefulWidget {
   static const String routeName = '/nav-bar';
@@ -32,6 +36,7 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
+    final userCartLength = context.watch<UserProvider>().user.cart.length;
     return Scaffold(
       body: _pages[_page],
       bottomNavigationBar: BottomNavigationBar(
@@ -98,7 +103,14 @@ class _BottomBarState extends State<BottomBar> {
               ),
               child: Badge(
                 elevation: 0,
-                badgeContent: const Text("2"),
+                padding: const EdgeInsets.all(0),
+                badgeContent: Text(
+                  userCartLength.toString(),
+                  style: TextStyle(
+                    color: GlobalVariables.selectedNavBarColor,
+                    fontSize: 12,
+                  ),
+                ),
                 badgeColor: Colors.white,
                 child: const Icon(
                   Icons.shopping_cart_outlined,
