@@ -13,15 +13,17 @@ class CarouselImages extends StatelessWidget {
           return Builder(
             builder: (BuildContext context) => Image.network(
               i,
-              fit: BoxFit.cover,
-              height: 200,
+              fit: BoxFit.fitWidth,
             ),
           );
         },
       ).toList(),
       options: CarouselOptions(
-        viewportFraction: 1,
-        height: 200,
+        autoPlay: true,
+        height: 150,
+        enlargeCenterPage: true,
+        autoPlayCurve: Curves.easeInOutCubicEmphasized,
+        autoPlayAnimationDuration: const Duration(seconds: 2),
       ),
     );
   }
