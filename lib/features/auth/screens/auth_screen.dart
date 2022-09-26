@@ -139,8 +139,11 @@ class _AuthScreenState extends State<AuthScreen> {
                               if (_signUpFormKey.currentState!.validate()) {
                                 signUpUser();
                               } else {
-                                showSnackBar(context,
-                                    'The information you\'ve supplied is invalid.');
+                                showSnackBar(
+                                  context,
+                                  'The information you\'ve supplied is invalid.',
+                                  "info",
+                                );
                               }
                             },
                             text: "Register")
@@ -195,6 +198,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           controller: _passwordController,
                           hintText: 'Password',
                           inputType: TextInputType.visiblePassword,
+                          obscureText: true,
                         ),
                         const SizedBox(
                           height: 10,
@@ -204,8 +208,11 @@ class _AuthScreenState extends State<AuthScreen> {
                               if (_signInFormKey.currentState!.validate()) {
                                 signInUser();
                               } else {
-                                showSnackBar(context,
-                                    'The information you\'ve supplied is invalid.');
+                                showSnackBar(
+                                  context,
+                                  'The information you\'ve supplied is invalid.',
+                                  "info",
+                                );
                               }
                             },
                             text: "Sign In")
