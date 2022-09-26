@@ -22,7 +22,6 @@ class _CategoryProductsState extends State<CategoryProducts> {
   final HomeServices homeServices = HomeServices();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCategoryProducts();
   }
@@ -54,16 +53,16 @@ class _CategoryProductsState extends State<CategoryProducts> {
               ),
             )),
       ),
-      body: SingleChildScrollView(
-        child: productsList == null
-            ? const Loader()
-            : productsList!.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No Product in this category for now',
-                    ),
-                  )
-                : Column(
+      body: productsList == null
+          ? const Loader()
+          : productsList!.isEmpty
+              ? const Center(
+                  child: Text(
+                    'No Product in this category for now',
+                  ),
+                )
+              : SingleChildScrollView(
+                  child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
@@ -241,7 +240,7 @@ class _CategoryProductsState extends State<CategoryProducts> {
                       ),
                     ],
                   ),
-      ),
+                ),
     );
   }
 
