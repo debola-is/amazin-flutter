@@ -1,7 +1,8 @@
 const express = require('express');
 const productRouter = express.Router();
-const Product = require('../models/product_model');
+const {Product} = require('../models/product_model');
 const auth = require('../middlewares/auth_middleware');
+const { json } = require('express');
 
 /* Gets all product for category parsed in through request parameter 
 Note: The value of "category" is case sensitive
@@ -67,6 +68,40 @@ productRouter.post("/api/products/rate", auth, async (req, res) => {
     }
 
     
-})
+});
+
+/* 
+The route "/api/products/deal-of-the-day" will not work because of the existing route "/api/products/:category"
+Router will treat "deal-of-the-day" from the client's request as a category.
+*/
+
+productRouter.get("/api/products/get/deal-of-the-day", async (req, res) => {
+
+    try{
+        let allProducts = await Product.find({});
+
+        sortedProducts = allProducts.sort((a,b)=>{
+            let sumA = 0;
+            let sumB = 0;
+
+            for (let i=0; i< a.ratings.length; i++) {
+                sumA += a.ratings[i].rating;
+            }
+            for (let i=0; i< b.ratings.length; i++) {
+                sumB += b.ratings[i].rating;
+            }
+            return sumA < sumB ? 1 : -1;
+        
+        });
+
+        res.json(sortedProducts[0]);
+    }
+    catch(e){
+        return res.status(500).json({error: e.message});
+    }
+
+    
+});
+
 
 module.exports = productRouter;
