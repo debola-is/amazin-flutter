@@ -39,53 +39,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
     'Fashion',
   ];
 
-  void getImages() async {
-    var result = await selectImages();
-    if (result.length + images.length < 11) {
-      images.addAll(result);
-
-      setState(() {});
-      return;
-    }
-// ignore: use_build_context_synchronously
-    showSnackBar(context, "You can only add a maximum of 10 product pictures");
-  }
-
-  void sellProduct() {
-    if (_adminProductFormKey.currentState!.validate() && images.isNotEmpty) {
-      //Because form validation does not cover our image selection, we also need to chack if selected images is not empty.
-      adminServices.addNewProduct(
-          context: context,
-          name: _productNameController.text,
-          description: _descriptionController.text,
-          price: double.parse(
-            _priceController.text.replaceAll(',', '').replaceAll(' ', ''),
-          ),
-          quantity: double.parse(
-            _quantityController.text
-                .replaceAll(',', '')
-                .replaceAll(' ', '')
-                .replaceAll('.', ''),
-          ),
-          category: category,
-          images: images,
-          onSuccess: () {
-            showSnackBar(context, 'Product Added Successfully');
-            Navigator.pop(context);
-            adminServices.getAllProducts(context: context);
-            setState(() {});
-          });
-    }
-  }
-
-  void deleteImage(File image) {
-    if (images.isNotEmpty) {
-      setState(() {
-        images.remove(image);
-      });
-    }
-  }
-
   Widget displayImagesCount() {
     int count = images.length;
     String text = count > 0
@@ -306,5 +259,56 @@ class _AddProductScreenState extends State<AddProductScreen> {
         ),
       ),
     );
+  }
+
+  void getImages() async {
+    var result = await selectImages();
+    if (result.length + images.length < 11) {
+      images.addAll(result);
+
+      setState(() {});
+      return;
+    }
+// ignore: use_build_context_synchronously
+    showSnackBar(
+        context, "You can only add a maximum of 10 product pictures", "info");
+  }
+
+  void sellProduct() {
+    if (_adminProductFormKey.currentState!.validate() && images.isNotEmpty) {
+      //Because form validation does not cover our image selection, we also need to chack if selected images is not empty.
+      try {
+        adminServices.addNewProduct(
+            context: context,
+            name: _productNameController.text,
+            description: _descriptionController.text,
+            price: double.parse(
+              _priceController.text.replaceAll(',', '').replaceAll(' ', ''),
+            ),
+            quantity: double.parse(
+              _quantityController.text
+                  .replaceAll(',', '')
+                  .replaceAll(' ', '')
+                  .replaceAll('.', ''),
+            ),
+            category: category,
+            images: images,
+            onSuccess: () {
+              showSnackBar(context, 'Product Added Successfully', "success");
+              Navigator.pop(context);
+              adminServices.getAllProducts(context: context);
+            });
+      } catch (e) {
+        showSnackBar(context, e.toString(), "error");
+      }
+    }
+  }
+
+  void deleteImage(File image) {
+    if (images.isNotEmpty) {
+      setState(() {
+        images.remove(image);
+      });
+    }
   }
 }

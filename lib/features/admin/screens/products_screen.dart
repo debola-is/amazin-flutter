@@ -23,116 +23,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
   List<Product>? products;
   bool isFABVisible = true;
 
-  void goToAddProduct() {
-    Navigator.pushNamed(context, AddProductScreen.routeName);
-  }
-
-  Future<void> getProducts() async {
-    products = await adminServices.getAllProducts(context: context);
-    setState(() {});
-  }
-
-  void deleteProduct(Product product) {
-    adminServices.deleteProduct(
-      context: context,
-      productId: product.id!,
-      onSuccess: () {
-        showSnackBar(context, '${product.name} has been deleted successfully!');
-        getProducts();
-      },
-    );
-  }
-
-  Future<void> confirmDelete(Product product) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            insetPadding: EdgeInsets.symmetric(
-              vertical: screenHeight(context) / 5,
-            ),
-            icon: Icon(
-              Icons.warning_outlined,
-              color: GlobalVariables.selectedNavBarColor,
-            ),
-            title: Text(
-              'Confirm Deletion of Product',
-              style: TextStyle(
-                  fontSize: 15, color: GlobalVariables.selectedNavBarColor),
-            ),
-            content: Column(
-              children: [
-                Text(
-                  '"${product.name}"',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black45,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: Image.network(
-                    product.images[0],
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'This action is NOT reversible',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black45,
-                  ),
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  deleteProduct(product);
-                  getProducts();
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  "Confirm",
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "Cancel",
-                  style: TextStyle(
-                    color: GlobalVariables.selectedNavBarColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              )
-            ],
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(20),
-              ),
-            ),
-            backgroundColor: Colors.grey.shade100,
-          );
-        });
-  }
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getProducts();
   }
@@ -184,7 +76,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           crossAxisCount: 2,
                         ),
                         itemBuilder: (context, index) {
-                          final productData = products![index];
+                          int reversedIndex = products!.length - 1 - index;
+                          final productData = products![reversedIndex];
                           return Column(
                             children: [
                               SizedBox(
@@ -259,5 +152,116 @@ class _ProductsScreenState extends State<ProductsScreen> {
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  void goToAddProduct() {
+    Navigator.pushNamed(context, AddProductScreen.routeName);
+  }
+
+  Future<void> getProducts() async {
+    products = await adminServices.getAllProducts(context: context);
+    setState(() {});
+  }
+
+  void deleteProduct(Product product) {
+    adminServices.deleteProduct(
+      context: context,
+      productId: product.id!,
+      onSuccess: () {
+        showSnackBar(context, '${product.name} has been deleted successfully!',
+            'success');
+        getProducts();
+      },
+    );
+  }
+
+  Future<void> confirmDelete(Product product) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Expanded(
+            child: AlertDialog(
+              insetPadding: EdgeInsets.symmetric(
+                  vertical: screenHeight(context) / 4,
+                  horizontal: screenWidth(context) / 6),
+              icon: Icon(
+                Icons.warning_outlined,
+                color: GlobalVariables.selectedNavBarColor,
+              ),
+              title: Text(
+                'Confirm Deletion of Product',
+                style: TextStyle(
+                    fontSize: 15, color: GlobalVariables.selectedNavBarColor),
+              ),
+              content: Column(
+                children: [
+                  Text(
+                    '"${product.name}"',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black45,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                    height: screenHeight(context) / 7,
+                    width: 100,
+                    child: Image.network(
+                      product.images[0],
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
+                    'This action is NOT reversible',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black45,
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    deleteProduct(product);
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    "Confirm",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Cancel",
+                    style: TextStyle(
+                      color: GlobalVariables.selectedNavBarColor,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                )
+              ],
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20),
+                ),
+              ),
+              backgroundColor: Colors.grey.shade100,
+            ),
+          );
+        });
   }
 }
