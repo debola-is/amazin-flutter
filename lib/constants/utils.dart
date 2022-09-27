@@ -7,9 +7,17 @@ void showSnackBar(
   String text,
   String type,
 ) {
+  var parent;
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       padding: const EdgeInsets.all(15),
+      duration: const Duration(milliseconds: 1500),
+      backgroundColor: type == "error"
+          ? const Color.fromARGB(255, 249, 225, 227)
+          : type == "success"
+              ? const Color.fromARGB(255, 236, 249, 236)
+              : const Color.fromARGB(255, 250, 248, 229),
+      behavior: SnackBarBehavior.floating,
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -40,15 +48,11 @@ void showSnackBar(
                     ? const Color.fromARGB(255, 18, 95, 23)
                     : Colors.black,
             size: 18,
-          )
+          ),
         ],
       ),
-      backgroundColor: type == "error"
-          ? const Color.fromARGB(255, 249, 225, 227)
-          : type == "success"
-              ? const Color.fromARGB(255, 236, 249, 236)
-              : const Color.fromARGB(255, 250, 248, 229),
-      behavior: SnackBarBehavior.floating,
+      action: SnackBarAction(
+          label: 'Dismiss', textColor: Colors.black45, onPressed: () {}),
     ),
   );
 }

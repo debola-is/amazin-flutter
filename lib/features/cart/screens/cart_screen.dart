@@ -2,6 +2,7 @@ import 'package:amazin/common/scroll_behaviour.dart';
 import 'package:amazin/common/widgets/custom_button.dart';
 import 'package:amazin/constants/global_variables.dart';
 import 'package:amazin/features/address/screens/address_screen.dart';
+import 'package:amazin/features/cart/services/cart_services.dart';
 import 'package:amazin/features/cart/widgets/cart_product.dart';
 import 'package:amazin/features/cart/widgets/cart_subtotal.dart';
 import 'package:amazin/features/home/widgets/address_box.dart';
@@ -18,6 +19,8 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  final CartServices cartServices = CartServices();
+
   @override
   Widget build(BuildContext context) {
     final user = context.watch<UserProvider>().user;
@@ -126,15 +129,21 @@ class _CartScreenState extends State<CartScreen> {
             thickness: 1,
           ),
           Expanded(
-            child: ScrollConfiguration(
-              behavior: MyCustomScrollBehaviour(),
-              child: ListView.builder(
-                itemCount: cartLength,
-                itemBuilder: (context, index) {
-                  return CartProduct(
-                    index: index,
-                  );
-                },
+            child: RefreshIndicator(
+              displacement: 0,
+              backgroundColor: Colors.transparent,
+              strokeWidth: 2,
+              onRefresh: updateCart,
+              child: ScrollConfiguration(
+                behavior: MyCustomScrollBehaviour(),
+                child: ListView.builder(
+                  itemCount: cartLength,
+                  itemBuilder: (context, index) {
+                    return CartProduct(
+                      index: index,
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -157,5 +166,9 @@ class _CartScreenState extends State<CartScreen> {
       AddressScreen.routeName,
       arguments: total.toString(),
     );
+  }
+
+  Future<void> updateCart() {
+    return cartServices.updateCart(context: context);
   }
 }

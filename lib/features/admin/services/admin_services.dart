@@ -9,9 +9,7 @@ import 'package:amazin/constants/utils.dart';
 import 'package:amazin/models/product.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:provider/provider.dart';
-
-const String _cloudname = 'dwiltileg';
-const String _uploadPreset = 't0hl9qse';
+import '../../../secrets.dart';
 
 class AdminServices {
   void addNewProduct({
@@ -26,7 +24,7 @@ class AdminServices {
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     try {
-      final cloudinary = CloudinaryPublic(_cloudname, _uploadPreset);
+      final cloudinary = CloudinaryPublic(cloudname, uploadPreset);
       final String folderName = '$name-${DateTime.now()}';
       List<String> imageUrls = [];
       for (var image in images) {
@@ -34,7 +32,7 @@ class AdminServices {
             await cloudinary.uploadFile(CloudinaryFile.fromFile(
           image.path,
           folder: folderName,
-        )); // parsing a folder helps to organise     our files in cloudinary file storage. The string interpolation is to split the product name and add a timestamp to the folder name.
+        )); // parsing a folder helps to organise our files in cloudinary file storage. The string interpolation is to split the product name and add a timestamp to the folder name.
         imageUrls.add(response.secureUrl);
       }
       Product product = Product(

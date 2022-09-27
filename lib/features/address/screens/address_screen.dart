@@ -1,5 +1,8 @@
+import 'package:amazin/common/widgets/custom_button.dart';
 import 'package:amazin/common/widgets/custom_textfield.dart';
 import 'package:amazin/constants/global_variables.dart';
+import 'package:amazin/constants/utils.dart';
+import 'package:amazin/features/address/services/address_services.dart';
 import 'package:amazin/features/admin/widgets/loader.dart';
 import 'package:amazin/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +12,13 @@ import 'package:provider/provider.dart';
 class AddressScreen extends StatefulWidget {
   static const String routeName = '/address';
   final String totalAmount;
-  const AddressScreen({super.key, required this.totalAmount});
+  const AddressScreen({
+    super.key,
+    required this.totalAmount,
+  }) : assert(
+          routeName != '',
+          totalAmount != '',
+        );
 
   @override
   State<AddressScreen> createState() => _AddressScreenState();
@@ -21,6 +30,8 @@ class _AddressScreenState extends State<AddressScreen> {
   final TextEditingController codeController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final _addressFormKey = GlobalKey<FormState>();
+  final AddressServices addressServices = AddressServices();
+  String shippingAddress = '';
 
   List<PaymentItem> paymentItems = [];
 
@@ -38,8 +49,8 @@ class _AddressScreenState extends State<AddressScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // var userAddress = context.watch<UserProvider>().user.address;
-    var userAddress = '3, Fake address, Mainland, Lagos';
+    var userAddress = context.watch<UserProvider>().user.address;
+    // var userAddress = '3, Fake address, Lagos';
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(
@@ -61,7 +72,10 @@ class _AddressScreenState extends State<AddressScreen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 15,
+          ),
           child: Column(
             children: [
               if (userAddress.isNotEmpty)
@@ -112,6 +126,7 @@ class _AddressScreenState extends State<AddressScreen> {
               Form(
                 key: _addressFormKey,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomTextField(
                         controller: houseController,
@@ -135,28 +150,23 @@ class _AddressScreenState extends State<AddressScreen> {
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 30,
               ),
-              GooglePayButton(
-                paymentConfigurationAsset: 'gpay.json',
-                onPaymentResult: onGooglePayResult,
-                paymentItems: paymentItems,
-                width: double.infinity,
-                height: 50,
-                type: GooglePayButtonType.buy,
-                loadingIndicator: const Loader(),
-              ),
+
+              CustomButton(onTap: onGooglePayResult, text: "Create Order"),
+              // GooglePayButton(
+              //   paymentConfigurationAsset: 'gpay.json',
+              //   onPaymentResult: onGooglePayResult,
+              //   paymentItems: paymentItems,
+              //   width: double.infinity,
+              //   height: 50,
+              //   type: GooglePayButtonType.buy,
+              //   loadingIndicator: const Loader(),
+              //   onPressed: () => onMakePayment(userAddress),
+              // ),
               const SizedBox(
                 height: 10,
               ),
-              ApplePayButton(
-                paymentConfigurationAsset: 'applepay.json',
-                onPaymentResult: onApplePayResult,
-                paymentItems: paymentItems,
-                width: double.infinity,
-                height: 50,
-                type: ApplePayButtonType.buy,
-              )
             ],
           ),
         ),
@@ -164,8 +174,49 @@ class _AddressScreenState extends State<AddressScreen> {
     );
   }
 
-  void onGooglePayResult(result) {}
+  void onGooglePayResult() {
+    if (Provider.of<UserProvider>(context, listen: false)
+        .user
+        .address
+        .isEmpty) {
+      addressServices.saveUserAddress(
+        context: context,
+        userAddress: shippingAddress,
+      );
+    }
+
+    addressServices.placeOrder(
+        context: context,
+        userAddress: shippingAddress,
+        totalSum: widget.totalAmount);
+  }
+
   void onApplePayResult(result) {}
+
+  void onMakePayment(String userProviderAddress) {
+    shippingAddress = '';
+    bool isFormEmpty = streetController.text.isEmpty ||
+        houseController.text.isEmpty ||
+        codeController.text.isEmpty ||
+        cityController.text.isEmpty;
+
+    if (!isFormEmpty) {
+      if (_addressFormKey.currentState!.validate()) {
+        shippingAddress =
+            '${houseController.text}, ${streetController.text}, ${cityController.text} - ${codeController.text}';
+      } else {
+        throw Exception('Please enter a valid address!');
+      }
+    } else if (userProviderAddress.isNotEmpty) {
+      shippingAddress = userProviderAddress;
+    } else {
+      showSnackBar(
+          context,
+          'Please enter correct shipping details! \nAll fields are required.',
+          "error");
+      return;
+    }
+  }
 
   @override
   void dispose() {

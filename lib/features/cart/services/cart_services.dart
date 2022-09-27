@@ -82,4 +82,37 @@ class CartServices {
       );
     }
   }
+
+  Future<void> updateCart({
+    required BuildContext context,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      http.Response response = await http.get(
+        Uri.parse('$uri/api/user/cart/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'user-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandler(
+        response: response,
+        context: context,
+        onSuccess: () {
+          User cartUpdatedUser =
+              userProvider.user.copyWith(cart: jsonDecode(response.body));
+          userProvider.setUserFromModel(cartUpdatedUser);
+          showSnackBar(context, 'Cart updated successfully', 'success');
+        },
+      );
+    } catch (e) {
+      showSnackBar(
+        context,
+        e.toString(),
+        "error",
+      );
+    }
+  }
 }
