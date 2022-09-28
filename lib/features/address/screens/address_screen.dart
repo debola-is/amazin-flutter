@@ -4,6 +4,7 @@ import 'package:amazin/constants/global_variables.dart';
 import 'package:amazin/constants/utils.dart';
 import 'package:amazin/features/address/services/address_services.dart';
 import 'package:amazin/features/admin/widgets/loader.dart';
+import 'package:amazin/features/cart/services/cart_services.dart';
 import 'package:amazin/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:pay/pay.dart';
@@ -152,18 +153,21 @@ class _AddressScreenState extends State<AddressScreen> {
               const SizedBox(
                 height: 30,
               ),
-
-              CustomButton(onTap: onGooglePayResult, text: "Create Order"),
-              // GooglePayButton(
-              //   paymentConfigurationAsset: 'gpay.json',
-              //   onPaymentResult: onGooglePayResult,
-              //   paymentItems: paymentItems,
-              //   width: double.infinity,
-              //   height: 50,
-              //   type: GooglePayButtonType.buy,
-              //   loadingIndicator: const Loader(),
-              //   onPressed: () => onMakePayment(userAddress),
-              // ),
+              CustomButton(
+                  onTap: () {
+                    onMakePayment(shippingAddress);
+                  },
+                  text: "Create Order"),
+              GooglePayButton(
+                paymentConfigurationAsset: 'gpay.json',
+                onPaymentResult: onGooglePayResult,
+                paymentItems: paymentItems,
+                width: double.infinity,
+                height: 50,
+                type: GooglePayButtonType.buy,
+                loadingIndicator: const Loader(),
+                onPressed: () => onMakePayment(userAddress),
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -174,7 +178,7 @@ class _AddressScreenState extends State<AddressScreen> {
     );
   }
 
-  void onGooglePayResult() {
+  void onGooglePayResult(result) {
     if (Provider.of<UserProvider>(context, listen: false)
         .user
         .address
@@ -189,9 +193,8 @@ class _AddressScreenState extends State<AddressScreen> {
         context: context,
         userAddress: shippingAddress,
         totalSum: widget.totalAmount);
+    Navigator.pop(context);
   }
-
-  void onApplePayResult(result) {}
 
   void onMakePayment(String userProviderAddress) {
     shippingAddress = '';
@@ -201,12 +204,8 @@ class _AddressScreenState extends State<AddressScreen> {
         cityController.text.isEmpty;
 
     if (!isFormEmpty) {
-      if (_addressFormKey.currentState!.validate()) {
-        shippingAddress =
-            '${houseController.text}, ${streetController.text}, ${cityController.text} - ${codeController.text}';
-      } else {
-        throw Exception('Please enter a valid address!');
-      }
+      shippingAddress =
+          '${houseController.text}, ${streetController.text}, ${cityController.text} - ${codeController.text}';
     } else if (userProviderAddress.isNotEmpty) {
       shippingAddress = userProviderAddress;
     } else {
@@ -214,7 +213,7 @@ class _AddressScreenState extends State<AddressScreen> {
           context,
           'Please enter correct shipping details! \nAll fields are required.',
           "error");
-      return;
+      throw Exception('No shipping address entered!');
     }
   }
 

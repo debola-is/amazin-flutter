@@ -152,7 +152,7 @@ userRouter.post('/api/user/order/create', auth, async (req, res)=>{
         let products = [];
 
         for(let i=0; i<cart.length; i++) {
-            let product = Product.findById(cart[i].product._id);
+            let product = await Product.findById(cart[i].product._id);
             if(product.quantity>= cart[i].quantity) {
                 product.quantity -= cart[i].quantity;
                 products.push({product, quantity: cart[i].quantity});
@@ -186,6 +186,18 @@ userRouter.post('/api/user/order/create', auth, async (req, res)=>{
         return res.status(500).json({error: e.message});
     }
 });
+
+
+userRouter.get('/api/user/orders/get', auth,async (req, res)=>{
+    try{
+        let userOrders = [];
+        userOrders = await Order.find({userId: req.user});
+        return res.json(userOrders);
+    }
+    catch(e){
+        res.status(500).json({error: e.message});
+    }
+})
 
 
 
