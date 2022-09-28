@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 /* for android emulators, for some reason you have to input the Ip address of the machine
 running the server (you can get this on windows with ipconfig command in terminal, ios simulators
 should run just fine with localhost:3000)*/
-String uri = 'http://172.20.10.3:3000'; // backend server url ip address and
+String uri = 'http://192.168.1.15:3000'; // backend server url ip address and
 // port
 
 class GlobalVariables {

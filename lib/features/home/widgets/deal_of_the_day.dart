@@ -50,16 +50,6 @@ class _DealOfDayState extends State<DealOfDay> {
                     onTap: navigateToProductDetail,
                     child: Column(
                       children: [
-                        Container(
-                          alignment: Alignment.topLeft,
-                          padding: const EdgeInsets.only(left: 10, top: 15),
-                          child: const Text(
-                            'Deal of the day',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30, vertical: 20),

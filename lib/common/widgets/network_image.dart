@@ -10,34 +10,26 @@ class CustomNetworkImage extends StatelessWidget {
     super.key,
     required this.imageSource,
     this.width,
-    this.height,
+    this.height = 150,
     this.imageFit = BoxFit.contain,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
-      imageSource,
+    return FadeInImage.assetNetwork(
+      placeholderScale: 0.5,
+      placeholderFit: BoxFit.fitHeight,
+      placeholder: 'assets/images/amazon_logo.png',
+      image: imageSource,
       width: width,
       height: height,
       fit: imageFit,
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) {
-          return child;
-        }
-        return Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 3,
-            value: loadingProgress.expectedTotalBytes != null
-                ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes!
-                : null,
-          ),
-        );
-      },
-      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-        return child;
-      },
+      imageErrorBuilder: (context, error, stackTrace) => Image.asset(
+        'assets/images/amazon_logo.png',
+        width: width,
+        height: height,
+        fit: imageFit,
+      ),
     );
   }
 }

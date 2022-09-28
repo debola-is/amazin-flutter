@@ -116,9 +116,14 @@ class _CartScreenState extends State<CartScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: CustomButton(
-              onTap: (() => navigateToAddressScreen(sum)),
-              text:
-                  'Proceed to buy $cartLength ${cartLength > 1 ? "items" : "item"}',
+              onTap: () {
+                if (user.cart.isNotEmpty) {
+                  navigateToAddressScreen(sum);
+                }
+              },
+              text: user.cart.isEmpty
+                  ? 'Add items to cart to continue'
+                  : 'Proceed to buy $cartLength ${cartLength > 1 ? "items" : "item"}',
               color: Colors.yellow.shade600,
             ),
           ),
@@ -131,7 +136,7 @@ class _CartScreenState extends State<CartScreen> {
           Expanded(
             child: RefreshIndicator(
               displacement: 0,
-              backgroundColor: Colors.transparent,
+              backgroundColor: GlobalVariables.backgroundColor,
               strokeWidth: 2,
               onRefresh: updateCart,
               child: ScrollConfiguration(

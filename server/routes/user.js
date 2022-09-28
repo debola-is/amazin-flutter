@@ -44,8 +44,14 @@ userRouter.post("/api/user/cart/add-to-cart", auth, async (req, res) => {
                 }
 
                 
-            } else {
-                user.cart.push({product, quantity: 1});
+            } 
+                // However if the user doesn't already have the product in their cart, we still need to check if the product is in stock. i.e if the quantity we have in our store >= 1.
+            else {
+                if(product.quantity > 0) {
+                    user.cart.push({product, quantity: 1});
+                } else {
+                    return res.status(400).json({error: `Product is out of stock.`});
+                }
             }
         }
         // Not really neccessary but we then save the updated state of the user model.
@@ -197,7 +203,7 @@ userRouter.get('/api/user/orders/get', auth,async (req, res)=>{
     catch(e){
         res.status(500).json({error: e.message});
     }
-})
+});
 
 
 

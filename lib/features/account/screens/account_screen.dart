@@ -1,7 +1,7 @@
 import 'package:amazin/constants/global_variables.dart';
 import 'package:amazin/features/account/widgets/account_buttons_layout.dart';
 import 'package:amazin/features/account/widgets/greeting_bar.dart';
-import 'package:amazin/features/account/widgets/orders.dart';
+import 'package:amazin/features/order/widgets/orders.dart';
 import 'package:flutter/material.dart';
 
 class AccountScreen extends StatelessWidget {

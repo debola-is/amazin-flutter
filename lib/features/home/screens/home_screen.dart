@@ -114,6 +114,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const HomeCategories(),
               const CarouselImages(),
+              Container(
+                alignment: Alignment.topLeft,
+                padding: const EdgeInsets.only(left: 10, top: 15),
+                child: const Text(
+                  'Deal of the day',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
               const DealOfDay(),
             ],
           ),
