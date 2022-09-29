@@ -4,8 +4,10 @@ import 'package:amazin/features/admin/screens/add_product_screen.dart';
 import 'package:amazin/features/auth/screens/auth_screen.dart';
 import 'package:amazin/features/home/screens/category_products.dart';
 import 'package:amazin/features/home/screens/home_screen.dart';
+import 'package:amazin/features/order/screens/order_details_screen.dart';
 import 'package:amazin/features/product_details/screens/product_details_screen.dart';
 import 'package:amazin/features/search/screens/search_screen.dart';
+import 'package:amazin/models/order.dart';
 import 'package:amazin/models/product.dart';
 import 'package:flutter/material.dart';
 
@@ -57,6 +59,14 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) => AddressScreen(
           totalAmount: totalAmount,
+        ),
+      );
+    case OrderDetailsScreen.routeName:
+      var order = routeSettings.arguments as Order;
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => OrderDetailsScreen(
+          order: order,
         ),
       );
 

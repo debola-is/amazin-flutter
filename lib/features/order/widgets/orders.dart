@@ -5,6 +5,7 @@ import 'package:amazin/constants/utils.dart';
 import 'package:amazin/features/account/services/account_services.dart';
 import 'package:amazin/features/account/widgets/single_product.dart';
 import 'package:amazin/features/admin/widgets/loader.dart';
+import 'package:amazin/features/order/screens/order_details_screen.dart';
 import 'package:amazin/models/order.dart';
 import 'package:flutter/material.dart';
 
@@ -57,8 +58,8 @@ class _OrdersState extends State<Orders> {
                   ),
 
                   // orders display section
-                  SizedBox(
-                    height: screenHeight(context) / 2,
+                  Container(
+                    height: screenHeight(context) * 0.55,
                     child: ScrollConfiguration(
                       behavior: MyCustomScrollBehaviour(),
                       child: ListView.builder(
@@ -66,55 +67,63 @@ class _OrdersState extends State<Orders> {
                         physics: const BouncingScrollPhysics(),
                         itemCount: orders!.length,
                         itemBuilder: (context, index) {
-                          return SizedBox(
-                            width: double.infinity,
-                            height: 150,
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 150,
-                                  margin: const EdgeInsets.all(10),
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 5),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.black12,
-                                      width: 1.5,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.white,
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(10),
-                                    child: CustomNetworkImage(
-                                      imageSource:
-                                          orders![index].products[0].images[0],
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Padding(
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, OrderDetailsScreen.routeName,
+                                  arguments: orders![index]);
+                            },
+                            child: SizedBox(
+                              width: double.infinity,
+                              height: 150,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 150,
+                                    margin: const EdgeInsets.all(10),
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 5,
-                                      vertical: 15,
+                                        horizontal: 5),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.black12,
+                                        width: 1.5,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.white,
                                     ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${orders![index].products[0].name} ${orders![index].products.length > 1 ? ' and ${orders![index].products.length - 1} items more..' : ''} ',
-                                          maxLines: 3,
-                                        ),
-                                        const Text(
-                                            'Created on: 26th August 2020'),
-                                        const Text(
-                                            'Status: Pending confirmation'),
-                                      ],
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      child: CustomNetworkImage(
+                                        imageSource: orders![index]
+                                            .products[0]
+                                            .images[0],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 5,
+                                        vertical: 15,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${orders![index].products[0].name} ${orders![index].products.length > 1 ? ' and ${orders![index].products.length - 1} items more..' : ''} ',
+                                            maxLines: 3,
+                                          ),
+                                          const Text(
+                                              'Created on: 26th August 2020'),
+                                          const Text(
+                                              'Status: Pending confirmation'),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         },
