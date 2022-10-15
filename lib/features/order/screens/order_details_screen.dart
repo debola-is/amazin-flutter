@@ -1,3 +1,4 @@
+import 'package:amazin/common/widgets/network_image.dart';
 import 'package:amazin/constants/global_variables.dart';
 import 'package:amazin/features/search/screens/search_screen.dart';
 import 'package:amazin/models/order.dart';
@@ -17,6 +18,14 @@ class OrderDetailsScreen extends StatefulWidget {
 }
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
+  int currentStep = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    currentStep = 3;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,17 +122,144 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 height: 10,
               ),
               Container(
-                  height: 150,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black26, width: 1),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                          'Order date: ${DateFormat().format(DateTime.fromMillisecondsSinceEpoch(widget.order.timeOfOrder))}'),
-                    ],
-                  ))
+                padding: const EdgeInsets.all(10),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black26, width: 1),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                        'Order date:    ${DateFormat().format(DateTime.fromMillisecondsSinceEpoch(widget.order.timeOfOrder))}'),
+                    Text('Order id:         ${widget.order.id}'),
+                    Text('Order total:    \$${widget.order.totalPrice}')
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                'Purchase Details',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black26, width: 1),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    for (int i = 0; i < widget.order.products.length; i++)
+                      Row(
+                        children: [
+                          CustomNetworkImage(
+                            imageSource: widget.order.products[i].images[0],
+                            height: 80,
+                            width: 80,
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.order.products[i].name,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  'Qty: ${widget.order.quantity[i]}',
+                                ),
+                                Text(
+                                  '\$${widget.order.products[i].price * widget.order.quantity[i]}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                'Tracking',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: const EdgeInsets.all(10),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black26, width: 1),
+                ),
+                child: Stepper(
+                  physics: const NeverScrollableScrollPhysics(),
+                  currentStep: currentStep,
+                  controlsBuilder: (context, details) {
+                    return const SizedBox();
+                  },
+                  steps: [
+                    Step(
+                      title: const Text('Pending'),
+                      content: const Text('Your order is yet to be delivered'),
+                      isActive: currentStep > 0,
+                      state: currentStep > 0
+                          ? StepState.complete
+                          : StepState.indexed,
+                    ),
+                    Step(
+                      title: const Text('Completed'),
+                      content: const Text(
+                          'Your order has been delivered, you are yet to sign.'),
+                      isActive: currentStep > 1,
+                      state: currentStep > 1
+                          ? StepState.complete
+                          : StepState.indexed,
+                    ),
+                    Step(
+                      title: const Text('Received'),
+                      content: const Text(
+                          'Your order has been delivered and signed by you.'),
+                      isActive: currentStep > 2,
+                      state: currentStep > 2
+                          ? StepState.complete
+                          : StepState.indexed,
+                    ),
+                    Step(
+                      title: const Text('Delivered'),
+                      content: const Text(
+                          'Your order has been delivered and signed by you.'),
+                      isActive: currentStep >= 3,
+                      state: currentStep >= 3
+                          ? StepState.complete
+                          : StepState.indexed,
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
