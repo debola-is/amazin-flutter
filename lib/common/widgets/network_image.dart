@@ -9,26 +9,29 @@ class CustomNetworkImage extends StatelessWidget {
   const CustomNetworkImage({
     super.key,
     required this.imageSource,
-    this.width,
+    this.width = 100,
     this.height = 150,
     this.imageFit = BoxFit.contain,
   });
 
   @override
   Widget build(BuildContext context) {
-    return FadeInImage.assetNetwork(
-      placeholderScale: 0.5,
-      placeholderFit: BoxFit.fitHeight,
-      placeholder: 'assets/images/amazon_logo.png',
-      image: imageSource,
-      width: width,
-      height: height,
-      fit: imageFit,
-      imageErrorBuilder: (context, error, stackTrace) => Image.asset(
-        'assets/images/amazon_logo.png',
+    return Padding(
+      padding:
+          EdgeInsets.symmetric(horizontal: width! / 10, vertical: height! / 10),
+      child: FadeInImage.assetNetwork(
+        placeholderFit: BoxFit.contain,
+        placeholder: 'assets/images/amazon_logo.png',
+        image: imageSource,
         width: width,
         height: height,
-        fit: BoxFit.fitWidth,
+        fit: imageFit,
+        imageErrorBuilder: (context, error, stackTrace) => Image.asset(
+          'assets/images/amazon_logo.png',
+          width: width,
+          height: height,
+          fit: BoxFit.fitWidth,
+        ),
       ),
     );
   }
