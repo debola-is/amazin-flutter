@@ -1,3 +1,4 @@
+import 'package:amazin/features/admin/screens/orders_screen.dart';
 import 'package:amazin/features/admin/screens/products_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -20,9 +21,7 @@ class _AdminScreenState extends State<AdminScreen> {
     const Center(
       child: Text('Analytics Page'),
     ),
-    const Center(
-      child: Text('Orders Page'),
-    ),
+    const OrdersScreen(),
   ];
 
   void updatePage(int page) {
