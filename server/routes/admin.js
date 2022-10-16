@@ -86,4 +86,51 @@ adminRouter.post('/admin/order/update-status', admin, async(req, res)=>{
     }
 });
 
+
+adminRouter.get('/admin/analytics', admin, async(req, res)=>{
+    try{
+        const orders = await Order.find({});
+
+        let totalEarnings = 0;
+        for (let i=0; i< orders.length; i++) {
+            totalEarnings += orders[i].totalPrice;
+        }
+
+        // Get earnings for all categories
+        let mobileEarnings = await getCategoryEarnings('Mobiles');
+        let essentialsEarnings = await getCategoryEarnings('Essentials');
+        let appliancesEarnings = await getCategoryEarnings('Appliances');
+        let booksEarnings = await getCategoryEarnings('Books');
+        let fashionEarnings = await getCategoryEarnings('Fashion');
+
+        // create all earnings object to be sent to client
+        let earnings = {
+            totalEarnings,
+            mobileEarnings,
+            essentialsEarnings,
+            appliancesEarnings,
+            booksEarnings,
+            fashionEarnings,
+        }
+        res.json(earnings);
+    }
+    catch(e) {
+        return res.status(500).json({error: e.message});  
+    }
+
+});
+
+async function getCategoryEarnings(category) {
+    let categoryEarnings = 0;
+    let categoryOrders = await Order.find({'products.product.category': category});
+
+    for (let i=0; i<categoryOrders.length; i++) {
+        for (let j=0; j< categoryOrders[i].products.length; j++) {
+            categoryEarnings+= categoryOrders[i].products[j].quantity * categoryOrders[i].products[j].price;
+        }
+    }
+
+    return categoryEarnings;
+}
+
 module.exports = adminRouter;
