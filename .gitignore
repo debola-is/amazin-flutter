@@ -48,5 +48,7 @@ node_modules
 package-lock.json
 
 # Constants
-/lib/constants/global_variables.dart
+global_variables.dart
+secrets.dart
+config.js
 
