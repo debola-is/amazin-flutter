@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:amazin/constants/error_handling.dart';
 import 'package:amazin/constants/global_variables.dart';
+import 'package:amazin/models/order.dart';
 import 'package:amazin/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -125,6 +126,71 @@ class AdminServices {
         e.toString(),
         "error",
       );
+    }
+  }
+
+  Future<List<Order>> getAllOrders({required BuildContext context}) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<Order> allOrders = [];
+
+    try {
+      http.Response response = await http.get(
+        Uri.parse('$uri/admin/get-orders'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'user-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandler(
+        response: response,
+        context: context,
+        onSuccess: () {
+          for (int i = 0; i < jsonDecode(response.body).length; i++) {
+            allOrders.add(
+              Order.fromJson(
+                jsonEncode(
+                  jsonDecode(response.body)[i],
+                ),
+              ),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString(), "error");
+    }
+    return allOrders;
+  }
+
+  void updateOrderStatus({
+    required BuildContext context,
+    required int newStatus,
+    required Order order,
+    required VoidCallback onSuccess,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      http.Response response = await http.post(
+        Uri.parse('$uri/admin/order/update-status'),
+        body: jsonEncode({
+          'id': order.id,
+          'status': newStatus,
+        }),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'user-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandler(
+        response: response,
+        context: context,
+        onSuccess: onSuccess,
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString(), "error");
     }
   }
 }
