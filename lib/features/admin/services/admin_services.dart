@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:amazin/constants/error_handling.dart';
 import 'package:amazin/constants/global_variables.dart';
+import 'package:amazin/features/admin/model/sales.dart';
 import 'package:amazin/models/order.dart';
 import 'package:amazin/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -192,5 +193,44 @@ class AdminServices {
     } catch (e) {
       showSnackBar(context, e.toString(), "error");
     }
+  }
+
+  Future<Map<String, dynamic>> getEarnings(
+      {required BuildContext context}) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<Sales> sales = [];
+    int totalEarning = 0;
+
+    try {
+      http.Response response = await http.get(
+        Uri.parse('$uri/admin/analytics'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'user-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandler(
+        response: response,
+        context: context,
+        onSuccess: () {
+          var res = jsonDecode(response.body);
+          totalEarning = res['totalEarnings'];
+          sales = [
+            Sales('Mobiles', res['mobileEarnings']),
+            Sales('Essentials', res['essentialsEarnings']),
+            Sales('Appliances', res['appliancesEarnings']),
+            Sales('Books', res['booksEarnings']),
+            Sales('Fashion', res['fashionEarnings']),
+          ];
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString(), "error");
+    }
+    return {
+      'sales': sales,
+      'totalEarnings': totalEarning,
+    };
   }
 }
