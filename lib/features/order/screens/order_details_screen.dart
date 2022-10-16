@@ -1,9 +1,13 @@
+import 'package:amazin/common/widgets/custom_button.dart';
 import 'package:amazin/common/widgets/network_image.dart';
 import 'package:amazin/constants/global_variables.dart';
+import 'package:amazin/features/admin/services/admin_services.dart';
 import 'package:amazin/features/search/screens/search_screen.dart';
 import 'package:amazin/models/order.dart';
+import 'package:amazin/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   static const String routeName = '/order_details_screen';
@@ -19,15 +23,18 @@ class OrderDetailsScreen extends StatefulWidget {
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   int currentStep = 0;
+  final AdminServices adminServices = AdminServices();
 
   @override
   void initState() {
     super.initState();
-    currentStep = 3;
+    currentStep = widget.order.status;
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<UserProvider>().user;
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(
@@ -217,15 +224,23 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 ),
                 child: Stepper(
                   physics: const NeverScrollableScrollPhysics(),
-                  currentStep: currentStep,
+                  currentStep: currentStep > 3 ? 3 : currentStep,
                   controlsBuilder: (context, details) {
+                    if (user.type == 'admin' && currentStep <= 3) {
+                      return CustomButton(
+                          onTap: () {
+                            print(details.currentStep);
+                            updateOrderStatus(details.currentStep);
+                          },
+                          text: 'Mark Done');
+                    }
                     return const SizedBox();
                   },
                   steps: [
                     Step(
                       title: const Text('Pending'),
                       content: const Text('Your order is yet to be delivered'),
-                      isActive: currentStep > 0,
+                      isActive: currentStep >= 0,
                       state: currentStep > 0
                           ? StepState.complete
                           : StepState.indexed,
@@ -234,7 +249,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       title: const Text('Completed'),
                       content: const Text(
                           'Your order has been delivered, you are yet to sign.'),
-                      isActive: currentStep > 1,
+                      isActive: currentStep >= 1,
                       state: currentStep > 1
                           ? StepState.complete
                           : StepState.indexed,
@@ -243,7 +258,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       title: const Text('Received'),
                       content: const Text(
                           'Your order has been delivered and signed by you.'),
-                      isActive: currentStep > 2,
+                      isActive: currentStep >= 2,
                       state: currentStep > 2
                           ? StepState.complete
                           : StepState.indexed,
@@ -253,7 +268,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       content: const Text(
                           'Your order has been delivered and signed by you.'),
                       isActive: currentStep >= 3,
-                      state: currentStep >= 3
+                      state: currentStep > 3
                           ? StepState.complete
                           : StepState.indexed,
                     ),
@@ -269,5 +284,18 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   void navigateToSearchScreen(String query) {
     Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
+  }
+
+  void updateOrderStatus(int status) async {
+    adminServices.updateOrderStatus(
+      context: context,
+      newStatus: status + 1,
+      order: widget.order,
+      onSuccess: () {
+        setState(() {
+          currentStep += 1;
+        });
+      },
+    );
   }
 }
