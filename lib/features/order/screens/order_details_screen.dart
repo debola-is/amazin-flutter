@@ -232,7 +232,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     if (user.type == 'admin' && currentStep <= 3) {
                       return CustomButton(
                           onTap: () {
-                            print(details.currentStep);
                             updateOrderStatus(details.currentStep);
                           },
                           text: 'Mark Done');
@@ -242,25 +241,25 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   steps: [
                     Step(
                       title: const Text('Pending'),
-                      content: const Text('Your order is yet to be delivered'),
+                      content: const Text('Your order is yet to be confirmed.'),
                       isActive: currentStep >= 0,
                       state: currentStep > 0
                           ? StepState.complete
                           : StepState.indexed,
                     ),
                     Step(
-                      title: const Text('Completed'),
+                      title: const Text('Confirmed'),
                       content: const Text(
-                          'Your order has been delivered, you are yet to sign.'),
+                          'Your order is confirmed and will be shipped out soon.'),
                       isActive: currentStep >= 1,
                       state: currentStep > 1
                           ? StepState.complete
                           : StepState.indexed,
                     ),
                     Step(
-                      title: const Text('Received'),
+                      title: const Text('Shipped'),
                       content: const Text(
-                          'Your order has been delivered and signed by you.'),
+                          'Your order has been shipped out for delivery.'),
                       isActive: currentStep >= 2,
                       state: currentStep > 2
                           ? StepState.complete
