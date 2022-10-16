@@ -27,7 +27,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: getAdminAppbar(),
+      appBar: getAdminAppbar(titleText: 'Orders'),
       body: allOrders == null
           ? const Center(
               child: Loader(),
