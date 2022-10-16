@@ -8,6 +8,7 @@ import 'package:amazin/features/admin/widgets/loader.dart';
 import 'package:amazin/features/order/screens/order_details_screen.dart';
 import 'package:amazin/models/order.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Orders extends StatefulWidget {
   const Orders({super.key});
@@ -58,13 +59,13 @@ class _OrdersState extends State<Orders> {
                   ),
 
                   // orders display section
-                  Container(
+                  SizedBox(
                     height: screenHeight(context) * 0.55,
                     child: ScrollConfiguration(
                       behavior: MyCustomScrollBehaviour(),
                       child: ListView.builder(
                         scrollDirection: Axis.vertical,
-                        physics: const BouncingScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: orders!.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
@@ -107,17 +108,55 @@ class _OrdersState extends State<Orders> {
                                         vertical: 15,
                                       ),
                                       child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             '${orders![index].products[0].name} ${orders![index].products.length > 1 ? ' and ${orders![index].products.length - 1} items more..' : ''} ',
                                             maxLines: 3,
+                                            style: TextStyle(
+                                              color: GlobalVariables
+                                                  .selectedNavBarColor,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
-                                          const Text(
-                                              'Created on: 26th August 2020'),
-                                          const Text(
-                                              'Status: Pending confirmation'),
+                                          const SizedBox(height: 10),
+                                          Row(
+                                            children: [
+                                              const SizedBox(
+                                                width: 90,
+                                                child: Text('Created on:'),
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                    DateFormat.yMMMEd().format(
+                                                  DateTime
+                                                      .fromMillisecondsSinceEpoch(
+                                                    orders![index].timeOfOrder,
+                                                  ),
+                                                )),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            children: [
+                                              const SizedBox(
+                                                width: 90,
+                                                child: Text('Status:'),
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                  checkOrderStatus(
+                                                      orders![index].status),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -138,6 +177,21 @@ class _OrdersState extends State<Orders> {
     orders = await accountServices.getOrders(context: context);
     if (mounted) {
       setState(() {});
+    }
+  }
+
+  String checkOrderStatus(int status) {
+    switch (status) {
+      case 0:
+        return 'Pending confirmation';
+      case 1:
+        return 'Order confirmed';
+      case 2:
+        return 'Order has been shipped';
+      case 3:
+        return 'Order delivered';
+      default:
+        return 'Order delivered';
     }
   }
 }
