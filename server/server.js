@@ -4,10 +4,11 @@ const adminRouter = require('./routes/admin');
 const authRouter= require('./routes/auth');
 const productRouter = require('./routes/product');
 const userRouter = require('./routes/user');
+const db = require('./config');
 
 // TODO: Create your own mogodb cluster uri from mongodb.com
 // TIP: When connecting to mongodb through clients native driver, use node.js 2.2.12 or older, SVR is probably not working due to Mongoose. 
-const db = "mongodb://debola:pingmenot@ac-evsdkma-shard-00-00.zbnsvhm.mongodb.net:27017,ac-evsdkma-shard-00-01.zbnsvhm.mongodb.net:27017,ac-evsdkma-shard-00-02.zbnsvhm.mongodb.net:27017/?ssl=true&replicaSet=atlas-l25laf-shard-0&authSource=admin&retryWrites=true&w=majority"
+
 
 
 // For testing on an emulator, the IP adress parmaeter should be used in the 

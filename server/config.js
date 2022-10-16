@@ -1,6 +1,2 @@
-const config = {
-    clientId: "kQPPGFbVa7WZDgTkiQvydutCJa3Egx3c",
-    callback: "http://localhost:3000/callback",
-    domain: "dev-7imzq2zn.us.auth0.com",
-    jwksUrl: "https://dev-7imzq2zn.us.auth0.com/.well-known/jwks.json",
-}
+const mongoUrl = "mongodb://debola:pingmenot@ac-evsdkma-shard-00-00.zbnsvhm.mongodb.net:27017,ac-evsdkma-shard-00-01.zbnsvhm.mongodb.net:27017,ac-evsdkma-shard-00-02.zbnsvhm.mongodb.net:27017/?ssl=true&replicaSet=atlas-l25laf-shard-0&authSource=admin&retryWrites=true&w=majority";
+module.exports = mongoUrl;
