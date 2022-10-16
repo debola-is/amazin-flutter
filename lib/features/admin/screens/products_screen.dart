@@ -33,7 +33,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: getAdminAppbar(),
+      appBar: getAdminAppbar(titleText: 'Admin'),
       body: products == null
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
