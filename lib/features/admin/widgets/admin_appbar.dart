@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../constants/global_variables.dart';
 
-PreferredSizeWidget getAdminAppbar() {
+PreferredSizeWidget getAdminAppbar({required String titleText}) {
   return PreferredSize(
     preferredSize: const Size.fromHeight(
       50,
@@ -24,11 +24,11 @@ PreferredSizeWidget getAdminAppbar() {
               height: 45,
             ),
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: Text(
-              'Admin',
-              style: TextStyle(
+              titleText,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
