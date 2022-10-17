@@ -199,7 +199,7 @@ class AdminServices {
       {required BuildContext context}) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     List<Sales> sales = [];
-    int totalEarning = 0;
+    double totalEarning = 0;
 
     try {
       http.Response response = await http.get(
@@ -215,13 +215,13 @@ class AdminServices {
         context: context,
         onSuccess: () {
           var res = jsonDecode(response.body);
-          totalEarning = res['totalEarnings'];
+          totalEarning = res['totalEarnings'].toDouble();
           sales = [
-            Sales('Mobiles', res['mobileEarnings']),
-            Sales('Essentials', res['essentialsEarnings']),
-            Sales('Appliances', res['appliancesEarnings']),
-            Sales('Books', res['booksEarnings']),
-            Sales('Fashion', res['fashionEarnings']),
+            Sales('Mobiles', res['mobileEarnings'].toDouble()),
+            Sales('Essentials', res['essentialsEarnings'].toDouble()),
+            Sales('Appliances', res['appliancesEarnings'].toDouble()),
+            Sales('Books', res['booksEarnings'].toDouble()),
+            Sales('Fashion', res['fashionEarnings'].toDouble()),
           ];
         },
       );

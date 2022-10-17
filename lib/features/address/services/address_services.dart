@@ -40,7 +40,7 @@ class AddressServices {
     }
   }
 
-  void placeOrder({
+  Future<void> placeOrder({
     required BuildContext context,
     required String userAddress,
     required String totalSum,

@@ -1,3 +1,5 @@
+import 'package:amazin/features/account/screens/account_screen.dart';
+import 'package:amazin/features/account/services/account_services.dart';
 import 'package:amazin/features/account/widgets/account_button.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +11,7 @@ class AccountButtonsLayout extends StatefulWidget {
 }
 
 class _AccountButtonsLayoutState extends State<AccountButtonsLayout> {
+  final AccountServices accountServices = AccountServices();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -32,7 +35,9 @@ class _AccountButtonsLayoutState extends State<AccountButtonsLayout> {
           children: [
             AccountButton(
               text: "Sign Out",
-              onTap: () {},
+              onTap: () {
+                accountServices.logOut(context);
+              },
             ),
             AccountButton(
               text: "Turn Seller",

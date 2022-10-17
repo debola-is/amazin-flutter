@@ -155,19 +155,20 @@ class _AddressScreenState extends State<AddressScreen> {
               ),
               CustomButton(
                   onTap: () {
-                    onMakePayment(shippingAddress);
+                    onMakePayment(userAddress);
+                    createOrder();
                   },
                   text: "Create Order"),
-              GooglePayButton(
-                paymentConfigurationAsset: 'gpay.json',
-                onPaymentResult: onGooglePayResult,
-                paymentItems: paymentItems,
-                width: double.infinity,
-                height: 50,
-                type: GooglePayButtonType.buy,
-                loadingIndicator: const Loader(),
-                onPressed: () => onMakePayment(userAddress),
-              ),
+              // GooglePayButton(
+              //   paymentConfigurationAsset: 'gpay.json',
+              //   onPaymentResult: onGooglePayResult,
+              //   paymentItems: paymentItems,
+              //   width: double.infinity,
+              //   height: 50,
+              //   type: GooglePayButtonType.buy,
+              //   loadingIndicator: const Loader(),
+              //   onPressed: () => onMakePayment(userAddress),
+              // ),
               const SizedBox(
                 height: 10,
               ),
@@ -178,23 +179,23 @@ class _AddressScreenState extends State<AddressScreen> {
     );
   }
 
-  void onGooglePayResult(result) {
-    if (Provider.of<UserProvider>(context, listen: false)
-        .user
-        .address
-        .isEmpty) {
-      addressServices.saveUserAddress(
-        context: context,
-        userAddress: shippingAddress,
-      );
-    }
+  // void onGooglePayResult(result) {
+  //   if (Provider.of<UserProvider>(context, listen: false)
+  //       .user
+  //       .address
+  //       .isEmpty) {
+  //     addressServices.saveUserAddress(
+  //       context: context,
+  //       userAddress: shippingAddress,
+  //     );
+  //   }
 
-    addressServices.placeOrder(
-        context: context,
-        userAddress: shippingAddress,
-        totalSum: widget.totalAmount);
-    Navigator.pop(context);
-  }
+  //   addressServices.placeOrder(
+  //       context: context,
+  //       userAddress: shippingAddress,
+  //       totalSum: widget.totalAmount);
+  //   Navigator.pop(context);
+  // }
 
   void onMakePayment(String userProviderAddress) {
     shippingAddress = '';
@@ -215,6 +216,24 @@ class _AddressScreenState extends State<AddressScreen> {
           "error");
       throw Exception('No shipping address entered!');
     }
+  }
+
+  void createOrder() async {
+    if (Provider.of<UserProvider>(context, listen: false)
+        .user
+        .address
+        .isEmpty) {
+      addressServices.saveUserAddress(
+        context: context,
+        userAddress: shippingAddress,
+      );
+    }
+
+    await addressServices.placeOrder(
+        context: context,
+        userAddress: shippingAddress,
+        totalSum: widget.totalAmount);
+    Navigator.pop(context);
   }
 
   @override

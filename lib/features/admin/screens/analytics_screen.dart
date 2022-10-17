@@ -1,6 +1,8 @@
 import 'package:amazin/features/admin/model/sales.dart';
 import 'package:amazin/features/admin/services/admin_services.dart';
 import 'package:amazin/features/admin/widgets/admin_appbar.dart';
+import 'package:amazin/features/admin/widgets/category_earnings_chart.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:amazin/features/admin/widgets/loader.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +15,7 @@ class AnalyticsScreen extends StatefulWidget {
 
 class _AnalyticsScreenState extends State<AnalyticsScreen> {
   final AdminServices adminServices = AdminServices();
-  int? totalSales;
+  double? totalSales;
   List<Sales>? earnings;
   @override
   void initState() {
@@ -27,14 +29,28 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       appBar: getAdminAppbar(titleText: 'Analytics'),
       body: earnings == null || totalSales == null
           ? const Loader()
-          : Column(
-              children: [
-                Text(
-                  '\$$totalSales',
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ],
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              child: Column(
+                children: [
+                  Text(
+                    '\$$totalSales',
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 200,
+                    child: CategoryEarningsChart(seriesList: [
+                      charts.Series(
+                        data: earnings!,
+                        id: 'Sales',
+                        domainFn: (Sales sales, _) => sales.label,
+                        measureFn: (Sales sales, _) => sales.earning,
+                      ),
+                    ]),
+                  ),
+                ],
+              ),
             ),
     );
   }

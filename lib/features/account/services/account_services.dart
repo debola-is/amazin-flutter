@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:amazin/constants/error_handling.dart';
 import 'package:amazin/constants/global_variables.dart';
 import 'package:amazin/constants/utils.dart';
+import 'package:amazin/features/auth/screens/auth_screen.dart';
 import 'package:amazin/models/order.dart';
 import 'package:amazin/providers/user_provider.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountServices {
   Future<List<Order>> getOrders({
@@ -43,5 +45,17 @@ class AccountServices {
       showSnackBar(context, e.toString(), "error");
     }
     return ordersList;
+  }
+
+  Future<void> logOut(BuildContext context) async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      await sharedPreferences.setString('user-auth-token', '');
+      Navigator.pushNamedAndRemoveUntil(
+          context, AuthScreen.routeName, (route) => false);
+    } catch (e) {
+      showSnackBar(context, e.toString(), 'error');
+    }
   }
 }

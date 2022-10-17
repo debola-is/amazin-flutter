@@ -123,11 +123,17 @@ adminRouter.get('/admin/analytics', admin, async(req, res)=>{
 async function getCategoryEarnings(category) {
     let categoryEarnings = 0;
     let categoryOrders = await Order.find({'products.product.category': category});
+    
 
-    for (let i=0; i<categoryOrders.length; i++) {
-        for (let j=0; j< categoryOrders[i].products.length; j++) {
-            categoryEarnings+= categoryOrders[i].products[j].quantity * categoryOrders[i].products[j].price;
-        }
+    if(categoryOrders.length > 0) {
+        
+        for (let i=0; i< categoryOrders.length; i++) {
+            for(let j = 0; j< categoryOrders[i].products.length; j++) {
+            if(categoryOrders[i].products[j].product.category === category) {
+                categoryEarnings+= categoryOrders[i].products[j].quantity * categoryOrders[i].products[j].product.price;
+            }  
+            }
+        } 
     }
 
     return categoryEarnings;

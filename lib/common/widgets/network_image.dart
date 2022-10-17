@@ -27,7 +27,7 @@ class CustomNetworkImage extends StatelessWidget {
         'assets/images/amazon_logo.png',
         width: width,
         height: height,
-        fit: BoxFit.fitWidth,
+        fit: BoxFit.contain,
       ),
     );
   }

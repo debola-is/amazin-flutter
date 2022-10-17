@@ -1,5 +1,6 @@
 import 'package:amazin/common/scroll_behaviour.dart';
 import 'package:amazin/common/widgets/network_image.dart';
+import 'package:amazin/constants/utils.dart';
 import 'package:amazin/features/admin/widgets/loader.dart';
 import 'package:amazin/features/home/services/home_services.dart';
 import 'package:amazin/features/product_details/screens/product_details_screen.dart';
@@ -56,6 +57,7 @@ class _DealOfDayState extends State<DealOfDay> {
                           child: CustomNetworkImage(
                             imageSource: product!.images[0],
                             height: 235,
+                            width: screenWidth(context),
                           ),
                         ),
                         Container(
