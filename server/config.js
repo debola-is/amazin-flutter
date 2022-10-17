@@ -1,2 +1,0 @@
-const mongoUrl = "mongodb://debola:pingmenot@ac-evsdkma-shard-00-00.zbnsvhm.mongodb.net:27017,ac-evsdkma-shard-00-01.zbnsvhm.mongodb.net:27017,ac-evsdkma-shard-00-02.zbnsvhm.mongodb.net:27017/?ssl=true&replicaSet=atlas-l25laf-shard-0&authSource=admin&retryWrites=true&w=majority";
-module.exports = mongoUrl;
